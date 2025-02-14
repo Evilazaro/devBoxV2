@@ -13,9 +13,9 @@ param location string = resourceGroup().location
 param environment string = 'dev'
 
 @description('Dev Center settings')
-var devCenterSettings = environment == 'dev'
-  ? loadJsonContent('settings/dev/devCenterSettings.json')
-  : loadJsonContent('settings/prod/devCenterSettings.json')
+var settings = environment == 'dev'
+  ? loadJsonContent('settings/dev/settings.json')
+  : loadJsonContent('settings/prod/settings.json')
 
 @description('Dev Center Resource')
 module devCenter './devCenterResource.bicep' = {
@@ -24,7 +24,7 @@ module devCenter './devCenterResource.bicep' = {
   params: {
     name: name
     location: location
-    devCenterSettings: devCenterSettings
+    settings: settings
   }
 }
 
@@ -34,7 +34,7 @@ module devCenterIdentity '../../identity/roleAssignmentsResource.bicep' = {
   scope: resourceGroup()
   params: {
    principalId: devCenter.outputs.principalId
-   roles: devCenterSettings.identity.roles
+   roles: settings.identity.roles
    scope: 'subscription'
   }
 }

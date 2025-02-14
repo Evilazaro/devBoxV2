@@ -7,7 +7,6 @@
     },
     "identity": {
         "type": "SystemAssigned",
-        "principalType": "ServicePrincipal",
         "roles": [
             "b24988ac-6180-42a0-ab88-20f7382dd24c",
             "eb960402-bf75-4cc3-8d68-35b34f960f72",

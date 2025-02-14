@@ -5,26 +5,26 @@ param name string
 param location string 
 
 @description('Dev Center settings')
-param devCenterSettings object = {}
+param settings object = {}
 
 @description('Dev Center Resource')
 resource devCenter 'Microsoft.DevCenter/devcenters@2024-10-01-preview' = {
   name: name
   location: location
-  tags: devCenterSettings.tags
+  tags: settings.tags
   identity: {
-    type: devCenterSettings.identity.type
-    userAssignedIdentities: devCenterSettings.identity.type == 'UserAssigned' ? devCenterSettings.identity.userAssignedIdentities : null
+    type: settings.identity.type
+    userAssignedIdentities: settings.identity.type == 'UserAssigned' ? settings.identity.userAssignedIdentities : null
   }
   properties: {
     projectCatalogSettings: {
-      catalogItemSyncEnableStatus: devCenterSettings.catalogItemSyncEnableStatus
+      catalogItemSyncEnableStatus: settings.catalogItemSyncEnableStatus
     }
     networkSettings: {
-      microsoftHostedNetworkEnableStatus: devCenterSettings.microsoftHostedNetworkEnableStatus
+      microsoftHostedNetworkEnableStatus: settings.microsoftHostedNetworkEnableStatus
     }
     devBoxProvisioningSettings:{
-      installAzureMonitorAgentEnableStatus: devCenterSettings.installAzureMonitorAgentEnableStatus
+      installAzureMonitorAgentEnableStatus: settings.installAzureMonitorAgentEnableStatus
     }
   }
 }
