@@ -17,6 +17,7 @@ var networkSettings = environment == 'dev'
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-05-01' = {
   name: name
   location: resourceGroup().location
+  tags: networkSettings.tags
   properties: {
     addressSpace: {
       addressPrefixes: networkSettings.addressPrefixes
@@ -35,8 +36,9 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-05-01' = {
 @description('Network Connections for the Virtual Network Subnets')
 resource networkConnection 'Microsoft.DevCenter/networkConnections@2024-10-01-preview' = [
   for (subnet, i) in networkSettings.subnets: {
-    name: '${subnet.name}-networkConnection'
+    name: subnet.name
     location: resourceGroup().location
+    tags: networkSettings.tags
     properties: {
       domainJoinType: 'AzureADJoin'
       subnetId: virtualNetwork.properties.subnets[i].id

@@ -27,11 +27,11 @@ resource connectivityResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-0
 }
 
 @description('Deploy Connectivity Module')
-module connectivity '../src/resources/connectivity/connectivityModule.bicep'= {
+module connectivity '../src/resources/connectivity/connectivityModule.bicep' = {
   scope: connectivityResourceGroup
   name: 'connectivity'
   params: {
-    name: '${solutionName}-${uniqueString(solutionName,connectivityResourceGroup.id)}-vNet'
+    name: '${solutionName}-${uniqueString(solutionName,connectivityResourceGroup.id)}'
     environment: environment
   }
 }
@@ -44,14 +44,12 @@ resource workloadResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' =
 }
 
 @description('Deploy Workload Module')
-module workload '../src/resources/workload/devCenter/devCenterModule.bicep'= {
+module workload '../src/resources/workload/devCenter/devCenterModule.bicep' = {
   scope: workloadResourceGroup
   name: 'devCenter'
   params: {
     name: '${solutionName}-devCenter'
+    networkConnections: connectivity.outputs.networkConnections
     environment: environment
   }
-  dependsOn:  [
-    connectivity
-  ]
 }
