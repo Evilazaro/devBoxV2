@@ -10,18 +10,31 @@ param location string = resourceGroup().location
   'test'
   'prod'
 ])
-param environment string = 'dev'	
+param environment string = 'dev'
 
 @description('Dev Center settings')
-var devCenterSettings = environment == 'dev' ? loadJsonContent('settings/dev/devCenterSettings.json') : loadJsonContent('settings/prod/devCenterSettings.json')
+var devCenterSettings = environment == 'dev'
+  ? loadJsonContent('settings/dev/devCenterSettings.json')
+  : loadJsonContent('settings/prod/devCenterSettings.json')
 
 @description('Dev Center Resource')
 module devCenter './devCenterResource.bicep' = {
-  name: '${name}-${uniqueString(name,resourceGroup().id)}-devCenter'	
+  name: '${name}-${uniqueString(name,resourceGroup().id)}-devCenter'
   scope: resourceGroup()
   params: {
     name: name
     location: location
     devCenterSettings: devCenterSettings
+  }
+}
+
+@description('Dev Center Identity')
+module devCenterIdentity '../../identity/roleAssignmentsResource.bicep' = {
+  name: 'Identity-${uniqueString(name,resourceGroup().id)}-devCenter'
+  scope: resourceGroup()
+  params: {
+   principalId: devCenter.outputs.principalId
+   roles: devCenterSettings.identity.roles
+   scope: 'subscription'
   }
 }

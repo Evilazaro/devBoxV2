@@ -28,3 +28,6 @@ resource devCenter 'Microsoft.DevCenter/devcenters@2024-10-01-preview' = {
     }
   }
 }
+
+@description('The principal ID of the identity to assign the roles to.')
+output principalId string = devCenter.identity.principalId
