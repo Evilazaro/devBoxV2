@@ -1,4 +1,5 @@
 @description('The name of the Dev Center resource.')
+@maxLength(63)
 param name string
 
 @description('Location for the Dev Center resource.')

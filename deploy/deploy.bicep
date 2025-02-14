@@ -30,7 +30,7 @@ var networkSettings = environment == 'dev'
   : loadJsonContent('../src/resources/connectivity/settings/prod/networkSettings.json')
 
 resource connectivityResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' = {
-  name: '${solutionName}-${landingZone.connectivity.name}-RG'
+  name: '${solutionName}-${landingZone.connectivity.name}-${environment}'
   location: location
   tags: landingZone.connectivity.tags
 }
@@ -44,7 +44,7 @@ module connectivity '../src/resources/connectivity/connectivityModule.bicep' = {
 }
 
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' = {
-  name: '${solutionName}-${landingZone.workload.name}-RG'
+  name: '${solutionName}-${landingZone.workload.name}-${environment}'
   location: location
   tags: landingZone.workload.tags
 }
@@ -53,7 +53,7 @@ module devCenter '../src/resources/workload/devCenter/devCenterModule.bicep' = {
   scope: resourceGroup
   name: 'workload'
   params: {
-    name: 'EYDevCenter'
+    name: '${solutionName}-${landingZone.workload.name}-${environment}'
     settings: settings
     location: location
   }

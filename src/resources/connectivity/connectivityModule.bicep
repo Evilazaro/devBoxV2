@@ -5,11 +5,11 @@ param networkSettings object
 module vnet 'virtualNetworkResource.bicep' = if (networkSettings.createVirtualNetwork == true) {
   name: 'virtualNetwork'
   params: {
-    name: '${networkSettings.name}-VNet'
+    name: '${networkSettings.name}'
     addressPrefixes: networkSettings.addressPrefixes
     subnets: [
       for subnet in networkSettings.subnets: {
-        name: '${subnet.name}-Subnet'
+        name: '${subnet.name}'
         properties: {
           addressPrefix: subnet.addressPrefix
         }
