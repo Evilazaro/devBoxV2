@@ -15,15 +15,16 @@ var landingZone = environment == 'dev'
   ? loadJsonContent('../src/resources/resourceOrganization/settings/dev/resourceOrganizationSettings.json')
   : loadJsonContent('../src/resources/resourceOrganization/settings/prod/resourceOrganizationSettings.json')
 
-// @description('Dev Center settings')
-// var settings = environment == 'dev'
-//   ? loadJsonContent('../src/resources/workload/devCenter/settings/dev/settings.json')
-//   : loadJsonContent('../src/resources/workload/devCenter/settings/prod/settings.json')
+@description('Dev Center settings')
+var settings = environment == 'dev'
+  ? loadJsonContent('../src/resources/workload/devCenter/settings/dev/settings.json')
+  : loadJsonContent('../src/resources/workload/devCenter/settings/prod/settings.json')
 
 // var networkSettings = environment == 'dev'
 //   ? loadJsonContent('../src/resources/connectivity/settings/dev/networkSettings.json')
 //   : loadJsonContent('../src/resources/connectivity/settings/prod/networkSettings.json')
 
+targetScope = 'subscription'
 @description('Deploy the Connectivity Resources Group')
 module connectivityResourceGroup  '../src/resources/resourceOrganization/resourceGroupResource.bicep'= {
   name: 'connectivityResourceGroup'
@@ -31,6 +32,7 @@ module connectivityResourceGroup  '../src/resources/resourceOrganization/resourc
   params: {
     name: landingZone.connectivity.name
     location: location
+    tags: landingZone.connectivity.tags
   }
 }
 
@@ -41,6 +43,7 @@ module identityResourceGroup  '../src/resources/resourceOrganization/resourceGro
   params: {
     name: landingZone.identity.name
     location: location
+    tags: landingZone.identity.tags
   }
 }
 
@@ -51,6 +54,7 @@ module managementResourceGroup  '../src/resources/resourceOrganization/resourceG
   params: {
     name: landingZone.management.name
     location: location
+    tags: landingZone.management.tags
   }
 }
 
@@ -61,5 +65,19 @@ module workloadResourceGroup  '../src/resources/resourceOrganization/resourceGro
   params: {
     name: landingZone.workload.name
     location: location
+    tags: landingZone.workload.tags
   }
+}
+
+@description('Deploy the Dev Center Workload')
+module devCenter  '../src/resources/workload/devCenter/devCenterModule.bicep' = {
+  scope: resourceGroup(landingZone.workload.name)
+  name: 'devCenter'
+  params: {
+    name: 'devcenter'
+    settings: settings
+  }
+  dependsOn: [
+    workloadResourceGroup
+  ]
 }

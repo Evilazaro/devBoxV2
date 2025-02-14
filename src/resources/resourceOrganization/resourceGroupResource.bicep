@@ -7,7 +7,7 @@ param name string
 param location string 
 
 @description('Resource group tags')
-param tags object = {}
+param tags object 
 
 @description('Resource group resource')
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' = {

@@ -7,8 +7,6 @@ param location string = resourceGroup().location
 @description('Dev Center settings')
 param settings object
 
-// @description('Network settings')
-// param networkSettings object
 @description('Dev Center Resource')
 module devCenter './devCenterResource.bicep' = {
   name: 'devCenter'
