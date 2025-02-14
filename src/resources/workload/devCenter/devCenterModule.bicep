@@ -52,12 +52,19 @@ resource vNetAttachment 'Microsoft.DevCenter/devcenters/attachednetworks@2024-10
 
 @description('Compute Gallery')
 resource computeGallery 'Microsoft.Compute/galleries@2024-03-03' = {
-  name: 'myGallery'
+  name: 'devCenterGallery'
   location: resourceGroup().location
   tags: settings.tags
   properties: {
     description: 'My Gallery'   
   }
 }
+
+@description('DevCenter Compute Gallery')
+resource devCenterGallery 'Microsoft.DevCenter/devcenters/galleries@2024-10-01-preview'= {
+  name: computeGallery.name
+  parent: devCenter
+}
+
 
 
