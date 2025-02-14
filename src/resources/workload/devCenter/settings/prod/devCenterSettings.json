@@ -1,0 +1,8 @@
+{
+    "catalogItemSyncEnableStatus": "Enabled",
+    "microsoftHostedNetworkEnableStatus": "Enabled",
+    "installAzureMonitorAgentEnableStatus": "Enabled",
+    "tags": {
+        "environment": "prod"
+    }
+}
