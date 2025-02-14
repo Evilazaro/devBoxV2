@@ -1,5 +1,5 @@
 @description('The name of the Dev Center resource.')
-param name string = 'module'
+param name string
 
 @description('Location for the Dev Center resource.')
 param location string = resourceGroup().location
