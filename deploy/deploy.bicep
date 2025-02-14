@@ -29,12 +29,14 @@ var networkSettings = environment == 'dev'
   ? loadJsonContent('../src/resources/connectivity/settings/dev/networkSettings.json')
   : loadJsonContent('../src/resources/connectivity/settings/prod/networkSettings.json')
 
+@description('Connectivity Resource Group')
 resource connectivityResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' = {
   name: '${solutionName}-${landingZone.connectivity.name}-${environment}'
   location: location
   tags: landingZone.connectivity.tags
 }
 
+@description('Deploys the network resources in the connectivity resource group.')
 module connectivity '../src/resources/connectivity/connectivityModule.bicep' = {
   scope: connectivityResourceGroup
   name: 'connectivity'
@@ -43,18 +45,23 @@ module connectivity '../src/resources/connectivity/connectivityModule.bicep' = {
   }
 }
 
+@description('Workload Resource Group')
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' = {
   name: '${solutionName}-${landingZone.workload.name}-${environment}'
   location: location
   tags: landingZone.workload.tags
 }
 
+@description('Deploys Dev Center in the workload resource group.')
 module devCenter '../src/resources/workload/devCenter/devCenterModule.bicep' = {
   scope: resourceGroup
   name: 'workload'
   params: {
-    name: '${solutionName}-${landingZone.workload.name}-${environment}'
+    name: '${solutionName}-${uniqueString(resourceGroup.id,landingZone.workload.name,environment)}'
     settings: settings
     location: location
   }
+  dependsOn: [
+    connectivity
+  ]
 }

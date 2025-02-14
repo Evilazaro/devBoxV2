@@ -13,7 +13,7 @@ module devCenter './devCenterResource.bicep' = {
   name: 'devCenter'
   scope: resourceGroup()
   params: {
-    name: '${name}-devCenter'
+    name: name
     location: location
     settings: settings
   }

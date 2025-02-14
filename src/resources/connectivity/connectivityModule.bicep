@@ -2,7 +2,7 @@
 param networkSettings object
 
 @description('Deploys a virtual network if createVirtualNetwork is true.')
-module vnet 'virtualNetworkResource.bicep' = if (networkSettings.createVirtualNetwork == true) {
+module vnet 'virtualNetworkResource.bicep' = {
   name: 'virtualNetwork'
   params: {
     name: '${networkSettings.name}'
@@ -18,3 +18,15 @@ module vnet 'virtualNetworkResource.bicep' = if (networkSettings.createVirtualNe
     tags: networkSettings.tags
   }
 }
+
+@description('Deploys network connections for each subnet in the virtual network.')
+module networkConnections 'networkConnectionResource.bicep' = [
+  for subnet in networkSettings.subnets: {
+    name: '${subnet.name}-networkConnection'
+    params: {
+      name: '${vnet.outputs.subnets[0].name}-networkConnection'
+      subnetId: vnet.outputs.subnets[0].id
+      tags: networkSettings.tags
+    }
+  }
+]
