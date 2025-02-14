@@ -7,7 +7,9 @@
     "subnets": [
         {
             "name": "subnet1",
-            "addressPrefix": "10.0.0.0/24"
+            "properties": {
+                "addressPrefix": "10.0.0.0/24"
+            }
         }
     ],
     "tags": {
