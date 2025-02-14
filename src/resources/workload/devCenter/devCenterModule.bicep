@@ -2,7 +2,7 @@
 param name string
 
 @description('Location for the Dev Center resource.')
-param location string 
+param location string
 
 @description('Dev Center settings')
 param settings object
@@ -23,8 +23,8 @@ module devCenterIdentity '../../identity/roleAssignmentsResource.bicep' = {
   name: 'devCenterIdentity'
   scope: resourceGroup()
   params: {
-   principalId: devCenter.outputs.principalId
-   roles: settings.identity.roles
-   scope: 'subscription'
+    principalId: devCenter.outputs.principalId
+    roles: settings.identity.roles
+    scope: 'subscription'
   }
 }

@@ -1,3 +1,5 @@
+targetScope = 'subscription'
+
 @description('Solution Name')
 param solutionName string
 
@@ -27,15 +29,13 @@ var networkSettings = environment == 'dev'
   ? loadJsonContent('../src/resources/connectivity/settings/dev/networkSettings.json')
   : loadJsonContent('../src/resources/connectivity/settings/prod/networkSettings.json')
 
-targetScope = 'subscription'
-
 resource connectivityResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' = {
   name: '${solutionName}-${landingZone.connectivity.name}-RG'
   location: location
   tags: landingZone.connectivity.tags
 }
 
-module connectivity '../src/resources/connectivity/connectivityModule.bicep'= {
+module connectivity '../src/resources/connectivity/connectivityModule.bicep' = {
   scope: connectivityResourceGroup
   name: 'connectivity'
   params: {
@@ -49,7 +49,7 @@ resource resourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' = {
   tags: landingZone.workload.tags
 }
 
-module devCenter '../src/resources/workload/devCenter/devCenterModule.bicep'= {
+module devCenter '../src/resources/workload/devCenter/devCenterModule.bicep' = {
   scope: resourceGroup
   name: 'workload'
   params: {

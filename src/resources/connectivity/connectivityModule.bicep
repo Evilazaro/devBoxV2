@@ -3,13 +3,13 @@ param networkSettings object
 
 @description('Deploys a virtual network if createVirtualNetwork is true.')
 module vnet 'virtualNetworkResource.bicep' = if (networkSettings.createVirtualNetwork == true) {
-  name: networkSettings.name
+  name: 'virtualNetwork'
   params: {
-    name: networkSettings.name
+    name: '${networkSettings.name}-VNet'
     addressPrefixes: networkSettings.addressPrefixes
     subnets: [
       for subnet in networkSettings.subnets: {
-        name: subnet.name
+        name: '${subnet.name}-Subnet'
         properties: {
           addressPrefix: subnet.addressPrefix
         }

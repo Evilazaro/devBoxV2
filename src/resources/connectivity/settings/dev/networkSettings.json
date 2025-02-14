@@ -11,6 +11,6 @@
         }
     ],
     "tags": {
-        "environment": "prod"
+        "environment": "dev"
     }
 }

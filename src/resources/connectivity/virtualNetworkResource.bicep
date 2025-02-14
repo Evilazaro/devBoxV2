@@ -8,7 +8,7 @@ param addressPrefixes array
 param subnets array
 
 @description('Virtual network tags')
-param tags object 
+param tags object
 
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-05-01' = {
   name: name

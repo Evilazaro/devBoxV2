@@ -1,32 +1,30 @@
-[
-    {
-        "connectivity": {
-            "name": "prodExp-Connectivity-RG",
-            "description": "connectivity",
-            "tags": {
-                "environment": "prod"
-            }
-        },
-        "identity": {
-            "name": "prodExp-Identity-RG",
-            "description": "identity",
-            "tags": {
-                "environment": "prod"
-            }
-        },
-        "management": {
-            "name": "prodExp-Management-RG",
-            "description": "management",
-            "tags": {
-                "environment": "prod"
-            }
-        },
-        "workload": {
-            "name": "prodExp-RG",
-            "description": "prodExp",
-            "tags": {
-                "environment": "prod"
-            }
+{
+    "connectivity": {
+        "name": "Connectivity",
+        "description": "connectivity",
+        "tags": {
+            "environment": "prod"
+        }
+    },
+    "identity": {
+        "name": "Identity",
+        "description": "identity",
+        "tags": {
+            "environment": "prod"
+        }
+    },
+    "management": {
+        "name": "Management",
+        "description": "management",
+        "tags": {
+            "environment": "prod"
+        }
+    },
+    "workload": {
+        "name": "RG",
+        "description": "prodExp",
+        "tags": {
+            "environment": "prod"
         }
     }
-]
+}

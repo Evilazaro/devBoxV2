@@ -1,11 +1,11 @@
 @description('The name of the Dev Center resource.')
-param name string 
+param name string
 
 @description('Location for the Dev Center resource.')
-param location string 
+param location string
 
 @description('Dev Center settings')
-param settings object 
+param settings object
 
 @description('Dev Center Resource')
 resource devCenter 'Microsoft.DevCenter/devcenters@2024-10-01-preview' = {
@@ -23,7 +23,7 @@ resource devCenter 'Microsoft.DevCenter/devcenters@2024-10-01-preview' = {
     networkSettings: {
       microsoftHostedNetworkEnableStatus: settings.microsoftHostedNetworkEnableStatus
     }
-    devBoxProvisioningSettings:{
+    devBoxProvisioningSettings: {
       installAzureMonitorAgentEnableStatus: settings.installAzureMonitorAgentEnableStatus
     }
   }
