@@ -1,0 +1,13 @@
+{
+    "createVnet": true,
+    "vnetSettings": {
+        "name": "vnet",
+        "addressSpace": "",
+        "subnets": [
+            {
+                "name": "subnet",
+                "addressPrefix": ""
+            }
+        ]
+    }
+}
