@@ -12,6 +12,10 @@ resource devCenter 'Microsoft.DevCenter/devcenters@2024-10-01-preview' = {
   name: name
   location: location
   tags: devCenterSettings.tags
+  identity: {
+    type: devCenterSettings.identity.type
+    userAssignedIdentities: devCenterSettings.identity.type == 'UserAssigned' ? devCenterSettings.identity.userAssignedIdentities : null
+  }
   properties: {
     projectCatalogSettings: {
       catalogItemSyncEnableStatus: devCenterSettings.catalogItemSyncEnableStatus
