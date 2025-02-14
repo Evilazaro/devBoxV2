@@ -11,7 +11,7 @@ param environment string = 'dev'
 
 // Load Configuration Files based on Environment
 
-var landingZones = environment == 'dev'
+var landingZone = environment == 'dev'
   ? loadJsonContent('../src/resources/resourceOrganization/settings/dev/resourceOrganizationSettings.json')
   : loadJsonContent('../src/resources/resourceOrganization/settings/prod/resourceOrganizationSettings.json')
 
@@ -24,11 +24,42 @@ var landingZones = environment == 'dev'
 //   ? loadJsonContent('../src/resources/connectivity/settings/dev/networkSettings.json')
 //   : loadJsonContent('../src/resources/connectivity/settings/prod/networkSettings.json')
 
-@description('Deploys the Azure Resource Groups for the workload')
-module landingZonesResources '../src/resources/resourceOrganization/resourceOrganizationModule.bicep' = {
-  name: 'landingZones'
+@description('Deploy the Connectivity Resources Group')
+module connectivityResourceGroup  '../src/resources/resourceOrganization/resourceGroupResource.bicep'= {
+  name: 'connectivityResourceGroup'
+  scope: subscription()
   params: {
-    landingZones: landingZones
+    name: landingZone.connectivity.name
+    location: location
+  }
+}
+
+@description('Deploy the Identity Resources Group')
+module identityResourceGroup  '../src/resources/resourceOrganization/resourceGroupResource.bicep'= {
+  name: 'identityResourceGroup'
+  scope: subscription()
+  params: {
+    name: landingZone.identity.name
+    location: location
+  }
+}
+
+@description('Deploy the management Resources Group')
+module managementResourceGroup  '../src/resources/resourceOrganization/resourceGroupResource.bicep'= {
+  name: 'managementResourceGroup'
+  scope: subscription()
+  params: {
+    name: landingZone.management.name
+    location: location
+  }
+}
+
+@description('Deploy the workload Resources Group')
+module workloadResourceGroup  '../src/resources/resourceOrganization/resourceGroupResource.bicep'= {
+  name: 'workloadResourceGroup'
+  scope: subscription()
+  params: {
+    name: landingZone.workload.name
     location: location
   }
 }
