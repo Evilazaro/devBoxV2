@@ -1,0 +1,30 @@
+{
+    "connectivity": {
+        "name": "Connectivity",
+        "description": "connectivity",
+        "tags": {
+            "environment": "dev"
+        }
+    },
+    "identity": {
+        "name": "Identity",
+        "description": "identity",
+        "tags": {
+            "environment": "dev"
+        }
+    },
+    "management": {
+        "name": "Management",
+        "description": "management",
+        "tags": {
+            "environment": "dev"
+        }
+    },
+    "workload": {
+        "name": "Workload",
+        "description": "devExp",
+        "tags": {
+            "environment": "dev"
+        }
+    }
+}

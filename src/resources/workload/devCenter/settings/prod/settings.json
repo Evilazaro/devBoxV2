@@ -3,7 +3,7 @@
     "microsoftHostedNetworkEnableStatus": "Enabled",
     "installAzureMonitorAgentEnableStatus": "Enabled",
     "tags": {
-        "environment": "dev"
+        "environment": "prod"
     },
     "identity": {
         "type": "SystemAssigned",

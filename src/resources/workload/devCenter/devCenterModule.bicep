@@ -1,25 +1,16 @@
 @description('The name of the Dev Center resource.')
+@maxLength(63)
 param name string
 
 @description('Location for the Dev Center resource.')
-param location string = resourceGroup().location
-
-@description('Deployment Environment')
-@allowed([
-  'dev'
-  'test'
-  'prod'
-])
-param environment string = 'dev'
+param location string
 
 @description('Dev Center settings')
-var settings = environment == 'dev'
-  ? loadJsonContent('settings/dev/settings.json')
-  : loadJsonContent('settings/prod/settings.json')
+param settings object
 
 @description('Dev Center Resource')
 module devCenter './devCenterResource.bicep' = {
-  name: '${name}-${uniqueString(name,resourceGroup().id)}-devCenter'
+  name: 'devCenter'
   scope: resourceGroup()
   params: {
     name: name
@@ -30,11 +21,11 @@ module devCenter './devCenterResource.bicep' = {
 
 @description('Dev Center Identity')
 module devCenterIdentity '../../identity/roleAssignmentsResource.bicep' = {
-  name: 'Identity-${uniqueString(name,resourceGroup().id)}-devCenter'
+  name: 'devCenterIdentity'
   scope: resourceGroup()
   params: {
-   principalId: devCenter.outputs.principalId
-   roles: settings.identity.roles
-   scope: 'subscription'
+    principalId: devCenter.outputs.principalId
+    roles: settings.identity.roles
+    scope: 'subscription'
   }
 }

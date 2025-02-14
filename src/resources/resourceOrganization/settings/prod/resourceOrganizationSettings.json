@@ -1,0 +1,30 @@
+{
+    "connectivity": {
+        "name": "Connectivity",
+        "description": "connectivity",
+        "tags": {
+            "environment": "prod"
+        }
+    },
+    "identity": {
+        "name": "Identity",
+        "description": "identity",
+        "tags": {
+            "environment": "prod"
+        }
+    },
+    "management": {
+        "name": "Management",
+        "description": "management",
+        "tags": {
+            "environment": "prod"
+        }
+    },
+    "workload": {
+        "name": "RG",
+        "description": "prodExp",
+        "tags": {
+            "environment": "prod"
+        }
+    }
+}
