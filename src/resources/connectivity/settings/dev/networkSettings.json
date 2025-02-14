@@ -1,18 +1,16 @@
 {
     "createVirtualNetwork": true,
-    "virtualNetworkSettings": {
-        "name": "vnet1",
-        "addressPrefixes": [
-            "10.0.0.0/16"
-        ],
-        "subnets": [
-            {
-                "name": "subnet1",
-                "addressPrefix": "10.0.0.1/24"
-            }
-        ]
-    },
+    "name": "vnet1",
+    "addressPrefixes": [
+        "10.0.0.0/16"
+    ],
+    "subnets": [
+        {
+            "name": "subnet1",
+            "addressPrefix": "10.0.0.0/24"
+        }
+    ],
     "tags": {
-        "environment": "dev"
+        "environment": "prod"
     }
 }

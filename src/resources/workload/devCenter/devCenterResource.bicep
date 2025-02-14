@@ -5,7 +5,7 @@ param name string
 param location string 
 
 @description('Dev Center settings')
-param settings object = {}
+param settings object 
 
 @description('Dev Center Resource')
 resource devCenter 'Microsoft.DevCenter/devcenters@2024-10-01-preview' = {

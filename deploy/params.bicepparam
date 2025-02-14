@@ -1,5 +1,8 @@
 using 'deploy.bicep'
 
+@description('Solution Name')
+param solutionName = 'DevExp'
+
 @description('Location to deploy')
 param location = 'eastus2'
 

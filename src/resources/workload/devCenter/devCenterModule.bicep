@@ -2,7 +2,7 @@
 param name string
 
 @description('Location for the Dev Center resource.')
-param location string = resourceGroup().location
+param location string 
 
 @description('Dev Center settings')
 param settings object
@@ -12,7 +12,7 @@ module devCenter './devCenterResource.bicep' = {
   name: 'devCenter'
   scope: resourceGroup()
   params: {
-    name: '${name}-${uniqueString(name,resourceGroup().id)}-devCenter'
+    name: '${name}-devCenter'
     location: location
     settings: settings
   }

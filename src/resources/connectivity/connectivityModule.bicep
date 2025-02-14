@@ -1,13 +1,20 @@
 @description('Network settings for the connectivity module.')
 param networkSettings object
 
-module vnet 'virtualNetworkResource.bicep' = if (networkSettings.createVirtualNetwork) {
+@description('Deploys a virtual network if createVirtualNetwork is true.')
+module vnet 'virtualNetworkResource.bicep' = if (networkSettings.createVirtualNetwork == true) {
   name: networkSettings.name
   params: {
     name: networkSettings.name
-    location: resourceGroup().location
     addressPrefixes: networkSettings.addressPrefixes
-    subnets: networkSettings.subnets
+    subnets: [
+      for subnet in networkSettings.subnets: {
+        name: subnet.name
+        properties: {
+          addressPrefix: subnet.addressPrefix
+        }
+      }
+    ]
     tags: networkSettings.tags
   }
 }

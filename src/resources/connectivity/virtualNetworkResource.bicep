@@ -4,11 +4,11 @@ param name string
 @description('The address space for the virtual network resource.')
 param addressPrefixes array
 
-@description('The subnets for the virtual network resource.')
+@description('Subnets for the virtual network resource.')
 param subnets array
 
 @description('Virtual network tags')
-param tags object = {}
+param tags object 
 
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-05-01' = {
   name: name
@@ -18,13 +18,6 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-05-01' = {
     addressSpace: {
       addressPrefixes: addressPrefixes
     }
-    subnets: [
-      {
-        name: 'default'
-        properties: {
-          addressPrefix: ''
-        }
-      }
-    ]
+    subnets: subnets
   }
 }

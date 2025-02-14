@@ -1,3 +1,6 @@
+@description('Solution Name')
+param solutionName string
+
 @description('Location for the deployment')
 param location string
 
@@ -20,64 +23,38 @@ var settings = environment == 'dev'
   ? loadJsonContent('../src/resources/workload/devCenter/settings/dev/settings.json')
   : loadJsonContent('../src/resources/workload/devCenter/settings/prod/settings.json')
 
-// var networkSettings = environment == 'dev'
-//   ? loadJsonContent('../src/resources/connectivity/settings/dev/networkSettings.json')
-//   : loadJsonContent('../src/resources/connectivity/settings/prod/networkSettings.json')
+var networkSettings = environment == 'dev'
+  ? loadJsonContent('../src/resources/connectivity/settings/dev/networkSettings.json')
+  : loadJsonContent('../src/resources/connectivity/settings/prod/networkSettings.json')
 
 targetScope = 'subscription'
-@description('Deploy the Connectivity Resources Group')
-module connectivityResourceGroup  '../src/resources/resourceOrganization/resourceGroupResource.bicep'= {
-  name: 'connectivityResourceGroup'
-  scope: subscription()
+
+resource connectivityResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' = {
+  name: '${solutionName}-${landingZone.connectivity.name}-RG'
+  location: location
+  tags: landingZone.connectivity.tags
+}
+
+module connectivity '../src/resources/connectivity/connectivityModule.bicep'= {
+  scope: connectivityResourceGroup
+  name: 'connectivity'
   params: {
-    name: landingZone.connectivity.name
-    location: location
-    tags: landingZone.connectivity.tags
+    networkSettings: networkSettings
   }
 }
 
-@description('Deploy the Identity Resources Group')
-module identityResourceGroup  '../src/resources/resourceOrganization/resourceGroupResource.bicep'= {
-  name: 'identityResourceGroup'
-  scope: subscription()
-  params: {
-    name: landingZone.identity.name
-    location: location
-    tags: landingZone.identity.tags
-  }
+resource resourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' = {
+  name: '${solutionName}-${landingZone.workload.name}-RG'
+  location: location
+  tags: landingZone.workload.tags
 }
 
-@description('Deploy the management Resources Group')
-module managementResourceGroup  '../src/resources/resourceOrganization/resourceGroupResource.bicep'= {
-  name: 'managementResourceGroup'
-  scope: subscription()
+module devCenter '../src/resources/workload/devCenter/devCenterModule.bicep'= {
+  scope: resourceGroup
+  name: 'workload'
   params: {
-    name: landingZone.management.name
-    location: location
-    tags: landingZone.management.tags
-  }
-}
-
-@description('Deploy the workload Resources Group')
-module workloadResourceGroup  '../src/resources/resourceOrganization/resourceGroupResource.bicep'= {
-  name: 'workloadResourceGroup'
-  scope: subscription()
-  params: {
-    name: landingZone.workload.name
-    location: location
-    tags: landingZone.workload.tags
-  }
-}
-
-@description('Deploy the Dev Center Workload')
-module devCenter  '../src/resources/workload/devCenter/devCenterModule.bicep' = {
-  scope: resourceGroup(landingZone.workload.name)
-  name: 'devCenter'
-  params: {
-    name: 'devcenter'
+    name: 'EYDevCenter'
     settings: settings
+    location: location
   }
-  dependsOn: [
-    workloadResourceGroup
-  ]
 }
