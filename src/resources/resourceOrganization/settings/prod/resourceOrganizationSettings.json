@@ -1,0 +1,32 @@
+[
+    {
+        "connectivity": {
+            "name": "devExp-Connectivity-RG",
+            "description": "connectivity",
+            "tags": {
+                "environment": "dev"
+            }
+        },
+        "identity": {
+            "name": "devExp-Identity-RG",
+            "description": "identity",
+            "tags": {
+                "environment": "dev"
+            }
+        },
+        "management": {
+            "name": "devExp-Management-RG",
+            "description": "management",
+            "tags": {
+                "environment": "dev"
+            }
+        },
+        "workload": {
+            "name": "devExp-RG",
+            "description": "devExp",
+            "tags": {
+                "environment": "dev"
+            }
+        }
+    }
+]

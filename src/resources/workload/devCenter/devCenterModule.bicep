@@ -17,12 +17,16 @@ var settings = environment == 'dev'
   ? loadJsonContent('settings/dev/settings.json')
   : loadJsonContent('settings/prod/settings.json')
 
+var networkSettings = environment == 'dev'
+  ? loadJsonContent('settings/dev/networkSettings.json')
+  : loadJsonContent('settings/prod/networkSettings.json')
+
 @description('Dev Center Resource')
 module devCenter './devCenterResource.bicep' = {
-  name: '${name}-${uniqueString(name,resourceGroup().id)}-devCenter'
+  name: 'devCenter'
   scope: resourceGroup()
   params: {
-    name: name
+    name: '${name}-${uniqueString(name,resourceGroup().id)}-devCenter'
     location: location
     settings: settings
   }
@@ -30,7 +34,7 @@ module devCenter './devCenterResource.bicep' = {
 
 @description('Dev Center Identity')
 module devCenterIdentity '../../identity/roleAssignmentsResource.bicep' = {
-  name: 'Identity-${uniqueString(name,resourceGroup().id)}-devCenter'
+  name: 'devCenterIdentity'
   scope: resourceGroup()
   params: {
    principalId: devCenter.outputs.principalId
