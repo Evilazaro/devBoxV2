@@ -1,5 +1,5 @@
 @description('Location for the deployment')
-param location string = 'eastus2'
+param location string
 
 @description('Deployment Environment')
 @allowed([
@@ -7,7 +7,7 @@ param location string = 'eastus2'
   'test'
   'prod'
 ])
-param environment string = 'dev'
+param environment string
 
 // Load Configuration Files based on Environment
 
