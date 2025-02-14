@@ -14,20 +14,10 @@ param location string
 ])
 param environment string
 
-// Load Configuration Files based on Environment
-
+@description('Landing Zone Information')
 var landingZone = environment == 'dev'
   ? loadJsonContent('../src/resources/resourceOrganization/settings/dev/resourceOrganizationSettings.json')
   : loadJsonContent('../src/resources/resourceOrganization/settings/prod/resourceOrganizationSettings.json')
-
-@description('Dev Center settings')
-var settings = environment == 'dev'
-  ? loadJsonContent('../src/resources/workload/devCenter/settings/dev/settings.json')
-  : loadJsonContent('../src/resources/workload/devCenter/settings/prod/settings.json')
-
-var networkSettings = environment == 'dev'
-  ? loadJsonContent('../src/resources/connectivity/settings/dev/networkSettings.json')
-  : loadJsonContent('../src/resources/connectivity/settings/prod/networkSettings.json')
 
 @description('Connectivity Resource Group')
 resource connectivityResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' = {
@@ -36,32 +26,30 @@ resource connectivityResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-0
   tags: landingZone.connectivity.tags
 }
 
-@description('Deploys the network resources in the connectivity resource group.')
+@description('Deploy Connectivity Module')
 module connectivity '../src/resources/connectivity/connectivityModule.bicep' = {
   scope: connectivityResourceGroup
   name: 'connectivity'
   params: {
-    networkSettings: networkSettings
+    name: '${solutionName}-${uniqueString(solutionName,connectivityResourceGroup.id)}'
+    environment: environment
   }
 }
 
-@description('Workload Resource Group')
-resource resourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' = {
+@description('Connectivity Resource Group')
+resource workloadResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' = {
   name: '${solutionName}-${landingZone.workload.name}-${environment}'
   location: location
   tags: landingZone.workload.tags
 }
 
-@description('Deploys Dev Center in the workload resource group.')
-module devCenter '../src/resources/workload/devCenter/devCenterModule.bicep' = {
-  scope: resourceGroup
-  name: 'workload'
+@description('Deploy Workload Module')
+module workload '../src/resources/workload/devCenter/devCenterModule.bicep' = {
+  scope: workloadResourceGroup
+  name: 'devCenter'
   params: {
-    name: '${solutionName}-${uniqueString(resourceGroup.id,landingZone.workload.name,environment)}'
-    settings: settings
-    location: location
+    name: '${solutionName}-devCenter'
+    networkConnections: connectivity.outputs.networkConnections
+    environment: environment
   }
-  dependsOn: [
-    connectivity
-  ]
 }

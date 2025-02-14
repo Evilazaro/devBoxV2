@@ -1,31 +1,67 @@
 @description('The name of the Dev Center resource.')
-@maxLength(63)
 param name string
 
-@description('Location for the Dev Center resource.')
-param location string
+@description('Deployment Environment')
+@allowed([
+  'dev'
+  'test'
+  'prod'
+])
+param environment string
+
+@description('networkConnections')
+param networkConnections array
 
 @description('Dev Center settings')
-param settings object
+var settings = environment == 'dev'
+  ? loadJsonContent('settings/dev/settings.json')
+  : loadJsonContent('settings/prod/settings.json')
 
 @description('Dev Center Resource')
-module devCenter './devCenterResource.bicep' = {
-  name: 'devCenter'
-  scope: resourceGroup()
-  params: {
-    name: name
-    location: location
-    settings: settings
+resource devCenter 'Microsoft.DevCenter/devcenters@2024-10-01-preview' = {
+  name: name
+  location: resourceGroup().location
+  tags: settings.tags
+  identity: {
+    type: settings.identity.type
+    userAssignedIdentities: settings.identity.type == 'UserAssigned' ? settings.identity.userAssignedIdentities : null
+  }
+  properties: {
+    projectCatalogSettings: {
+      catalogItemSyncEnableStatus: settings.catalogItemSyncEnableStatus
+    }
+    networkSettings: {
+      microsoftHostedNetworkEnableStatus: settings.microsoftHostedNetworkEnableStatus
+    }
+    devBoxProvisioningSettings: {
+      installAzureMonitorAgentEnableStatus: settings.installAzureMonitorAgentEnableStatus
+    }
   }
 }
 
-@description('Dev Center Identity')
-module devCenterIdentity '../../identity/roleAssignmentsResource.bicep' = {
-  name: 'devCenterIdentity'
-  scope: resourceGroup()
-  params: {
-    principalId: devCenter.outputs.principalId
-    roles: settings.identity.roles
-    scope: 'subscription'
+@description('Deploys Network Connections for the Dev Center')
+resource vNetAttachment 'Microsoft.DevCenter/devcenters/attachednetworks@2024-10-01-preview' = [
+  for connection in networkConnections: {
+    name: connection.name
+    parent: devCenter
+    properties: {
+      networkConnectionId: connection.id
+    }
   }
+]
+
+@description('Compute Gallery')
+resource computeGallery 'Microsoft.Compute/galleries@2024-03-03' = {
+  name: 'devCentergallery'
+  location: resourceGroup().location
+  tags: settings.tags
+  properties: {
+    description: 'My Gallery'
+  }
+}
+
+@description('DevCenter Compute Gallery')
+resource devCenterGallery 'Microsoft.DevCenter/devcenters/galleries@2024-10-01-preview' = {
+  name: computeGallery.name
+  parent: devCenter
 }
