@@ -82,6 +82,24 @@ resource devCenterGallery 'Microsoft.DevCenter/devcenters/galleries@2024-10-01-p
   }
 }
 
+@description('Create Custom Images')
+resource customImages 'Microsoft.Compute/galleries/images@2024-03-03' = [
+  for image in devBoxDefinitionsSettings: { 
+    name: image.image
+    location: resourceGroup().location
+    parent: computeGallery
+    properties: {
+      identifier: {
+        sku: image.sku
+        offer: 'devbox'
+        publisher: 'microsoft'
+      }
+      osState: 'Generalized'
+      osType: 'Windows'
+    }
+  }
+]
+
 @description('Dev Box Definition')
 resource devBoxDefinitions 'Microsoft.DevCenter/devcenters/devboxdefinitions@2024-10-01-preview' = [
   for devboxDefinition in devBoxDefinitionsSettings: {
@@ -99,5 +117,8 @@ resource devBoxDefinitions 'Microsoft.DevCenter/devcenters/devboxdefinitions@202
         name: devboxDefinition.sku
       }
     }
+    dependsOn: [
+      customImages
+    ]
   }
 ]
