@@ -31,7 +31,7 @@ resource project 'Microsoft.DevCenter/projects@2024-10-01-preview' = {
 }
 
 @description('Dev Center Projects Role Assignments')
-module roleAssignmentsProjects '../../identity/roleAssignmentsResource.bicep' = {
+module projectRoleAssignments '../../identity/roleAssignmentsResource.bicep' = {
   name: 'roleAssignments:${project.name}'
   params: {
     scope: 'subscription'
@@ -41,16 +41,10 @@ module roleAssignmentsProjects '../../identity/roleAssignmentsResource.bicep' = 
 }
 
 @description('Project Catalogs')
-resource catalog 'Microsoft.DevCenter/projects/catalogs@2024-10-01-preview' = [
-  for catalog in catalogs: {
-    name: '${project.name}-${catalog.name}'
-    parent: project
-    properties: {
-      gitHub: {
-        uri: catalog.uri
-        branch: catalog.branch
-        path: catalog.path
-      }
-    }
+module projectCatalogs 'catalogs.bicep' = {
+  name: 'catalogs:${project.name}'
+  params: {
+    projectName: project.name
+    catalogs: catalogs
   }
-]
+}
