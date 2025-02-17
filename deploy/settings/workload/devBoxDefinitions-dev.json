@@ -22,8 +22,8 @@
         }
     },
     {
-        "name": "backEndEngineer",
-        "image": "microsoftvisualstudio_visualstudioplustools_vs-2022-ent-general-win11-m365-gen2",
+        "name": "backEndEngineerCustom",
+        "image": "custom_microsoftvisualstudio_visualstudioplustools_vs-2022-ent",
         "imageVersion": "latest",
         "sku": "general_i_32c128gb512ssd_v2",
         "hibernateSupport": "Disabled",

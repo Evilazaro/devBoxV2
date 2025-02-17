@@ -21,6 +21,10 @@ var devBoxDefinitionsSettings = environment == 'dev'
   ? loadJsonContent('../../deploy/settings/workload/devBoxDefinitions-dev.json')
   : loadJsonContent('../../deploy/settings/workload/devBoxDefinitions-prod.json')
 
+var customImagesSettings = environment == 'dev'
+  ? loadJsonContent('../../deploy/settings/workload/customImages-dev.json')
+  : loadJsonContent('../../deploy/settings/workload/customImages-prod.json')
+
 @description('Dev Center Resource')
 resource devCenter 'Microsoft.DevCenter/devcenters@2024-10-01-preview' = {
   name: name
@@ -84,41 +88,41 @@ resource devCenterGallery 'Microsoft.DevCenter/devcenters/galleries@2024-10-01-p
 
 @description('Create Custom Images')
 resource customImages 'Microsoft.Compute/galleries/images@2024-03-03' = [
-  for image in devBoxDefinitionsSettings: { 
-    name: image.image
+  for customImage in customImagesSettings: {
+    name: customImage.name
     location: resourceGroup().location
     parent: computeGallery
     properties: {
       identifier: {
-        sku: image.sku
-        offer: 'devbox'
-        publisher: 'microsoft'
+        sku: customImage.sku
+        offer: customImage.offer
+        publisher: customImage.publisher
       }
-      osState: 'Generalized'
-      osType: 'Windows'
+      osState: customImage.osState
+      osType: customImage.osType
     }
   }
 ]
 
-@description('Dev Box Definition')
-resource devBoxDefinitions 'Microsoft.DevCenter/devcenters/devboxdefinitions@2024-10-01-preview' = [
-  for devboxDefinition in devBoxDefinitionsSettings: {
-    name: devboxDefinition.name
-    location: resourceGroup().location
-    parent: devCenter
-    properties: {
-      imageReference: {
-        id: devboxDefinition.default
-          ? '${resourceId('Microsoft.DevCenter/devcenters', devCenter.name)}/galleries/default/images/${devboxDefinition.image}'
-          : '${resourceId('Microsoft.DevCenter/devcenters', devCenter.name)}/galleries/${devCenterGallery.name}/images/${devboxDefinition.image}'
-      }
-      hibernateSupport: devboxDefinition.hibernateSupport
-      sku: {
-        name: devboxDefinition.sku
-      }
-    }
-    dependsOn: [
-      customImages
-    ]
-  }
-]
+// @description('Dev Box Definition')
+// resource devBoxDefinitions 'Microsoft.DevCenter/devcenters/devboxdefinitions@2024-10-01-preview' = [
+//   for devboxDefinition in devBoxDefinitionsSettings: {
+//     name: devboxDefinition.name
+//     location: resourceGroup().location
+//     parent: devCenter
+//     properties: {
+//       imageReference: {
+//         id: devboxDefinition.default
+//           ? '${resourceId('Microsoft.DevCenter/devcenters', devCenter.name)}/galleries/default/images/${devboxDefinition.image}'
+//           : '${resourceId('Microsoft.DevCenter/devcenters', devCenter.name)}/galleries/${devCenterGallery.name}/images/${devboxDefinition.image}'
+//       }
+//       hibernateSupport: devboxDefinition.hibernateSupport
+//       sku: {
+//         name: devboxDefinition.sku
+//       }
+//     }
+//     dependsOn: [
+//       customImages
+//     ]
+//   }
+// ]
