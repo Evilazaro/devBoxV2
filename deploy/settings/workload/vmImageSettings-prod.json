@@ -3,7 +3,7 @@
         "imageDefinition": {
             "name": "backEndTemplate",
             "publisher": "Contoso",
-            "offer": "BackEnd Engineer",
+            "offer": "BackEndEngineer",
             "sku": "backEnd"
         },
         "imageTemplate": {

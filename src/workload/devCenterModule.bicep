@@ -113,49 +113,49 @@ resource imageDefinitions 'Microsoft.Compute/galleries/images@2024-03-03' = [
   }
 ]
 
-resource vmImageTemplates 'Microsoft.VirtualMachineImages/imageTemplates@2024-02-01' = [
-  for (vmImageSetting, i) in vmImageSettings: {
-    name: '${vmImageSetting[i].imageDefinition.name}'
-    location: resourceGroup().location
-    identity: {
-      type: 'UserAssigned'
-      userAssignedIdentities: {
-        '/subscriptions/6a4029ea-399b-4933-9701-436db72883d4/resourceGroups/DevExp-Connectivity-dev/providers/Microsoft.ManagedIdentity/userAssignedIdentities/MyApp': {}
-      }
-    }
-    properties: {
-      buildTimeoutInMinutes: 60
-      distribute: [
-        {
-          artifactTags: {}
-          excludeFromLatest: false
-          galleryImageId: resourceId(
-            'Microsoft.Compute/galleries/images/versions',
-            computeGallery.name,
-            imageDefinitions[i].name,
-            '1.0.0'
-          )
-          replicationRegions: [
-            'eastus2'
-          ]
-          runOutputName: 'runOutputImageVersion'
-          type: 'SharedImage'
-        }
-      ]
-      source: {
-        offer: vmImageSetting[i].imageTemplate.source.offer
-        publisher: vmImageSetting[i].imageTemplate.source.publisher
-        sku: vmImageSetting[i].imageTemplate.source.sku
-        type: 'PlatformImage'
-        version: 'latest'
-      }
-      vmProfile: {
-        osDiskSizeGB: 127
-        vmSize: 'Standard_DS1_v2'
-      }
-    }
-  }
-]
+// resource vmImageTemplates 'Microsoft.VirtualMachineImages/imageTemplates@2024-02-01' = [
+//   for (vmImageSetting, i) in vmImageSettings: {
+//     name: '${vmImageSetting[i].imageDefinition.name}'
+//     location: resourceGroup().location
+//     identity: {
+//       type: 'UserAssigned'
+//       userAssignedIdentities: {
+//         '/subscriptions/6a4029ea-399b-4933-9701-436db72883d4/resourceGroups/DevExp-Connectivity-dev/providers/Microsoft.ManagedIdentity/userAssignedIdentities/MyApp': {}
+//       }
+//     }
+//     properties: {
+//       buildTimeoutInMinutes: 60
+//       distribute: [
+//         {
+//           artifactTags: {}
+//           excludeFromLatest: false
+//           galleryImageId: resourceId(
+//             'Microsoft.Compute/galleries/images/versions',
+//             computeGallery.name,
+//             imageDefinitions[i].name,
+//             '1.0.0'
+//           )
+//           replicationRegions: [
+//             'eastus2'
+//           ]
+//           runOutputName: 'runOutputImageVersion'
+//           type: 'SharedImage'
+//         }
+//       ]
+//       source: {
+//         offer: vmImageSetting[i].imageTemplate.source.offer
+//         publisher: vmImageSetting[i].imageTemplate.source.publisher
+//         sku: vmImageSetting[i].imageTemplate.source.sku
+//         type: 'PlatformImage'
+//         version: 'latest'
+//       }
+//       vmProfile: {
+//         osDiskSizeGB: 127
+//         vmSize: 'Standard_DS1_v2'
+//       }
+//     }
+//   }
+// ]
 
 // @description('DevCenter Compute Gallery')
 // resource devCenterGallery 'Microsoft.DevCenter/devcenters/galleries@2024-10-01-preview' = {
