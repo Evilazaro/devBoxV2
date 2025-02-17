@@ -133,27 +133,12 @@ resource devCenterEnvironments 'Microsoft.DevCenter/devcenters/environmentTypes@
 ]
 
 @description('Dev Center Projects')
-resource projects 'Microsoft.DevCenter/projects@2024-10-01-preview' = [
-  for project in settings.projects: {
+module projects 'projects/projectModule.bicep'= [for project in settings.projects: {
+  name: project.name
+  params: {
     name: project.name
-    location: resourceGroup().location
-    identity: {
-      type: project.identity.type
-    }
-    properties: {
-      devCenterId: devCenter.id
-    }
+    catalogs: project.catalogs
+    devCenterId: devCenter.id
+    roles: project.identity.roles
   }
-]
-
-@description('Dev Center Projects Role Assignments')
-module roleAssignmentsProjects '../identity/roleAssignmentsResource.bicep' = [
-  for (identity,i) in settings.projects: {
-    name: identity[i].name
-    params: {
-      scope: 'subscription'
-      principalId: projects[i].identity.principalId
-      roles: identity[i].identity.roles
-    }
-  }
-]
+}]
