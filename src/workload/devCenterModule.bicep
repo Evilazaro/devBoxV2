@@ -86,26 +86,18 @@ resource devBoxDefinitions 'Microsoft.DevCenter/devcenters/devboxdefinitions@202
     properties: {
       hibernateSupport: devBoxDefinition.hibernateSupport
       imageReference: {
-        id: devBoxDefinition.default
-          ? resourceId(
-              'Microsoft.DevCenter/devcenters/galleries',
-              '/default/',
-              '/images/',
-              devBoxDefinition.image,
-              '/version/',
-              devBoxDefinition.imageVersion
-            )
-          : resourceId(
-              'Microsoft.DevCenter/devcenters/galleries/',
-              '/${computeGallery.name}/',
-              '/images/',
-              devBoxDefinition.image,
-              '/version/',
-              devBoxDefinition.imageVersion
-            )
+        id: resourceId(
+          'Microsoft.DevCenter/devcenters/galleries',
+          devCenter.name,
+          'Default',
+          'images',
+          devBoxDefinition.imageName
+        )
       }
       osStorageType: devBoxDefinition.osStorageType
-      sku: devBoxDefinition.sku
+      sku: {
+        name: devBoxDefinition.sku
+      }
     }
   }
 ]
