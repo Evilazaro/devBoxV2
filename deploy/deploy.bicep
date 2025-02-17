@@ -16,8 +16,8 @@ param environment string
 
 @description('Landing Zone Information')
 var landingZone = environment == 'dev'
-  ? loadJsonContent('../src/resources/resourceOrganization/settings/dev/resourceOrganizationSettings.json')
-  : loadJsonContent('../src/resources/resourceOrganization/settings/prod/resourceOrganizationSettings.json')
+  ? loadJsonContent('settings/resourceOrganization/resourceOrganizationSettings-dev.json')
+  : loadJsonContent('settings/resourceOrganization/resourceOrganizationSettings-prod.json')
 
 @description('Connectivity Resource Group')
 resource connectivityResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' = {
@@ -27,7 +27,7 @@ resource connectivityResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-0
 }
 
 @description('Deploy Connectivity Module')
-module connectivity '../src/resources/connectivity/connectivityModule.bicep' = {
+module connectivity '../src/connectivity/connectivityModule.bicep' = {
   scope: connectivityResourceGroup
   name: 'connectivity'
   params: {
@@ -44,7 +44,7 @@ resource workloadResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' =
 }
 
 @description('Deploy Workload Module')
-module workload '../src/resources/workload/devCenter/devCenterModule.bicep' = {
+module workload '../src/workload/devCenterModule.bicep' = {
   scope: workloadResourceGroup
   name: 'devCenter'
   params: {
