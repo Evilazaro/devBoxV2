@@ -17,13 +17,13 @@ var settings = environment == 'dev'
   ? loadJsonContent('../../deploy/settings/workload/workloadSettings-dev.json')
   : loadJsonContent('../../deploy/settings/workload/workloadSettings-prod.json')
 
-var devBoxDefinitionsSettings = environment == 'dev'
-  ? loadJsonContent('../../deploy/settings/workload/devBoxDefinitions-dev.json')
-  : loadJsonContent('../../deploy/settings/workload/devBoxDefinitions-prod.json')
+// var devBoxDefinitionsSettings = environment == 'dev'
+//   ? loadJsonContent('../../deploy/settings/workload/devBoxDefinitions-dev.json')
+//   : loadJsonContent('../../deploy/settings/workload/devBoxDefinitions-prod.json')
 
-var customImagesSettings = environment == 'dev'
-  ? loadJsonContent('../../deploy/settings/workload/customImages-dev.json')
-  : loadJsonContent('../../deploy/settings/workload/customImages-prod.json')
+var vmImageSettings = environment == 'dev'
+  ? loadJsonContent('../../deploy/settings/workload/vmImageSettings-dev.json')
+  : loadJsonContent('../../deploy/settings/workload/vmImageSettings-prod.json')
 
 @description('Dev Center Resource')
 resource devCenter 'Microsoft.DevCenter/devcenters@2024-10-01-preview' = {
@@ -77,52 +77,91 @@ resource computeGallery 'Microsoft.Compute/galleries@2024-03-03' = {
   }
 }
 
-@description('DevCenter Compute Gallery')
-resource devCenterGallery 'Microsoft.DevCenter/devcenters/galleries@2024-10-01-preview' = {
-  name: computeGallery.name
-  parent: devCenter
-  properties: {
-    galleryResourceId: computeGallery.id
-  }
-}
-
-@description('Create Custom Images')
-resource customImages 'Microsoft.Compute/galleries/images@2024-03-03' = [
-  for customImage in customImagesSettings: {
-    name: customImage.name
+@description('Compute Gallery Image Definitions')
+resource imageDefinitions 'Microsoft.Compute/galleries/images@2024-03-03' = [
+  for vmImageSetting in vmImageSettings: {
+    name: vmImageSetting.imageDefinition.name
     location: resourceGroup().location
     parent: computeGallery
     properties: {
+      hyperVGeneration: 'V2'
+      architecture: 'x64'
+      features: [
+        {
+          name: 'SecurityType'
+          value: 'TrustedLaunchSupported'
+        }
+      ]
       identifier: {
-        sku: customImage.properties.identifier.sku
-        offer: customImage.properties.identifier.offer
-        publisher: customImage.properties.identifier.publisher
+        publisher: vmImageSetting.imageDefinition.publisher
+        offer: vmImageSetting.imageDefinition.offer
+        sku: vmImageSetting.imageDefinition.sku
       }
-      osState: customImage.properties.osState
-      osType: customImage.properties.osType
+      osState: 'Generalized'
+      osType: 'Windows'
+      recommended: {
+        vCPUs: {
+          min: 1
+          max: 16
+        }
+        memory: {
+          min: 1
+          max: 32
+        }
+      }
     }
   }
 ]
 
-// @description('Dev Box Definition')
-// resource devBoxDefinitions 'Microsoft.DevCenter/devcenters/devboxdefinitions@2024-10-01-preview' = [
-//   for devboxDefinition in devBoxDefinitionsSettings: {
-//     name: devboxDefinition.name
-//     location: resourceGroup().location
-//     parent: devCenter
-//     properties: {
-//       imageReference: {
-//         id: devboxDefinition.default
-//           ? '${resourceId('Microsoft.DevCenter/devcenters', devCenter.name)}/galleries/default/images/${devboxDefinition.image}'
-//           : '${resourceId('Microsoft.DevCenter/devcenters', devCenter.name)}/galleries/${devCenterGallery.name}/images/${devboxDefinition.image}'
-//       }
-//       hibernateSupport: devboxDefinition.hibernateSupport
-//       sku: {
-//         name: devboxDefinition.sku
-//       }
-//     }
-//     dependsOn: [
-//       customImages
-//     ]
+resource vmImageTemplates 'Microsoft.VirtualMachineImages/imageTemplates@2024-02-01' = [
+  for (vmImageSetting, i) in vmImageSettings: {
+    name: '${vmImageSetting[i].imageDefinition.name}'
+    location: resourceGroup().location
+    identity: {
+      type: 'UserAssigned'
+      userAssignedIdentities: {
+        '/subscriptions/6a4029ea-399b-4933-9701-436db72883d4/resourceGroups/DevExp-Connectivity-dev/providers/Microsoft.ManagedIdentity/userAssignedIdentities/MyApp': {}
+      }
+    }
+    properties: {
+      buildTimeoutInMinutes: 60
+      distribute: [
+        {
+          artifactTags: {}
+          excludeFromLatest: false
+          galleryImageId: resourceId(
+            'Microsoft.Compute/galleries/images/versions',
+            computeGallery.name,
+            imageDefinitions[i].name,
+            '1.0.0'
+          )
+          replicationRegions: [
+            'eastus2'
+          ]
+          runOutputName: 'runOutputImageVersion'
+          type: 'SharedImage'
+        }
+      ]
+      source: {
+        offer: vmImageSetting[i].imageTemplate.source.offer
+        publisher: vmImageSetting[i].imageTemplate.source.publisher
+        sku: vmImageSetting[i].imageTemplate.source.sku
+        type: 'PlatformImage'
+        version: 'latest'
+      }
+      vmProfile: {
+        osDiskSizeGB: 127
+        vmSize: 'Standard_DS1_v2'
+      }
+    }
+  }
+]
+
+// @description('DevCenter Compute Gallery')
+// resource devCenterGallery 'Microsoft.DevCenter/devcenters/galleries@2024-10-01-preview' = {
+//   name: computeGallery.name
+//   parent: devCenter
+//   properties: {
+//     galleryResourceId: computeGallery.id
 //   }
-// ]
+// }

@@ -1,0 +1,23 @@
+[
+    {
+        "imageDefinition": {
+            "name": "backEndTemplate",
+            "publisher": "Contoso",
+            "offer": "BackEnd Engineer",
+            "sku": "backEnd"
+        },
+        "imageTemplate": {
+            "source": {
+                "offer": "windows-11",
+                "publisher": "microsoftwindowsdesktop",
+                "sku": "win11-22h2-entn",
+                "type": "PlatformImage",
+                "version": "latest"
+            },
+            "vmProfile": {
+                "osDiskSizeGB": 127,
+                "vmSize": "Standard_DS1_v2"
+            }
+        }
+    }
+]
