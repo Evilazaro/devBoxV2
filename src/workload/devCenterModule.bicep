@@ -41,6 +41,7 @@ resource devCenter 'Microsoft.DevCenter/devcenters@2024-10-01-preview' = {
 
 module roleAssignments '../identity/roleAssignmentsResource.bicep' = {
   name: 'roleAssignments'
+  scope: resourceGroup()
   params: {
     scope: 'subscription'
     principalId: devCenter.identity.principalId
@@ -76,6 +77,9 @@ resource devCenterGallery 'Microsoft.DevCenter/devcenters/galleries@2024-10-01-p
   properties: {
     galleryResourceId: computeGallery.id
   }
+  dependsOn: [
+    roleAssignments
+  ]
 }
 
 @description('Dev Center DevBox Definitions')
@@ -135,7 +139,8 @@ resource devCenterEnvironments 'Microsoft.DevCenter/devcenters/environmentTypes@
 @description('Dev Center Projects')
 module projects 'projects/projectModule.bicep' = [
   for project in settings.projects: {
-    name: 'Project:${project.name}'
+    name: '${project.name}-project'
+    scope: resourceGroup()
     params: {
       name: project.name
       catalogs: project.catalogs

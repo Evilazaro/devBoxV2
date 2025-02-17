@@ -1,6 +1,6 @@
 using 'deploy.bicep'
 
-param solutionName = 'DevExp'
+param solutionName = 'contoso'
 
 param location = 'eastus2'
 
