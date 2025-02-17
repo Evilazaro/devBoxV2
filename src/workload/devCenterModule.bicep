@@ -91,7 +91,7 @@ resource devBoxDefinitions 'Microsoft.DevCenter/devcenters/devboxdefinitions@202
           devCenter.name,
           'Default',
           'images',
-          devBoxDefinition.imageName
+          devBoxDefinition.image
         )
       }
       osStorageType: devBoxDefinition.osStorageType
