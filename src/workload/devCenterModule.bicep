@@ -86,18 +86,36 @@ resource devBoxDefinitions 'Microsoft.DevCenter/devcenters/devboxdefinitions@202
     properties: {
       hibernateSupport: devBoxDefinition.hibernateSupport
       imageReference: {
-        id: resourceId(
-          'Microsoft.DevCenter/devcenters/galleries',
-          devCenter.name,
-          'Default',
-          'images',
-          devBoxDefinition.image
-        )
+        id: '${resourceId('Microsoft.DevCenter/devcenters/galleries/',devCenter.name,'Default')}/images/${devBoxDefinition.image}'
       }
-      osStorageType: devBoxDefinition.osStorageType
       sku: {
         name: devBoxDefinition.sku
       }
     }
+  }
+]
+
+@description('Dev Center Catalogs')
+resource devCenterCatalogs 'Microsoft.DevCenter/devcenters/catalogs@2024-10-01-preview' = [
+  for catalog in settings.devCenterCatalogs: {
+    name: catalog.name
+    parent: devCenter
+    properties: (catalog.gitHub)
+      ? {
+          gitHub: {
+            uri: catalog.uri
+            branch: catalog.branch
+            path: catalog.path
+          }
+          syncType: 'Scheduled'
+        }
+      : {
+          adoGit: {
+            uri: catalog.uri
+            branch: catalog.branch
+            path: catalog.path
+          }
+          syncType: 'Scheduled'
+        }
   }
 ]

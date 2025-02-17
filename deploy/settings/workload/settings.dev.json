@@ -42,20 +42,17 @@
             "tags": {
                 "environment": "dev"
             }
-        },
-        {
-            "name": "backEndEngineerCustom",
-            "image": "custom_microsoftvisualstudio_visualstudioplustools_vs-2022-ent",
-            "imageVersion": "latest",
-            "sku": "general_i_32c128gb512ssd_v2",
-            "hibernateSupport": "Disabled",
-            "default": false,
-            "tags": {
-                "environment": "dev"
-            }
         }
     ],
-    "devCenterCatalogs": [],
+    "devCenterCatalogs": [
+        {
+            "gitHub": true,
+            "name": "customTasks",
+            "uri": "https://github.com/Evilazaro/DevExp-DevBox.git",
+            "branch": "main",
+            "path": "deploy/settings/workload/tasks"
+        }
+    ],
     "projects": [
         {
             "identity": {
