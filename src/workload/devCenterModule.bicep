@@ -14,8 +14,8 @@ param networkConnections array
 
 @description('Dev Center settings')
 var settings = environment == 'dev'
-  ? loadJsonContent('../../../../deploy/settings/workload/workloadSettings-dev.json')
-  : loadJsonContent('../../../../deploy/settings/workload/workloadSettings-prod.json')
+  ? loadJsonContent('../../deploy/settings/workload/workloadSettings-dev.json')
+  : loadJsonContent('../../deploy/settings/workload/workloadSettings-prod.json')
 
 @description('Dev Center Resource')
 resource devCenter 'Microsoft.DevCenter/devcenters@2024-10-01-preview' = {

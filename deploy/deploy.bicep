@@ -27,7 +27,7 @@ resource connectivityResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-0
 }
 
 @description('Deploy Connectivity Module')
-module connectivity '../src/resources/connectivity/connectivityModule.bicep' = {
+module connectivity '../src/connectivity/connectivityModule.bicep' = {
   scope: connectivityResourceGroup
   name: 'connectivity'
   params: {
@@ -44,7 +44,7 @@ resource workloadResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' =
 }
 
 @description('Deploy Workload Module')
-module workload '../src/resources/workload/devCenter/devCenterModule.bicep' = {
+module workload '../src/workload/devCenterModule.bicep' = {
   scope: workloadResourceGroup
   name: 'devCenter'
   params: {
