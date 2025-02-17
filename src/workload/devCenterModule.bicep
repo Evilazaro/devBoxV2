@@ -94,12 +94,12 @@ resource customImages 'Microsoft.Compute/galleries/images@2024-03-03' = [
     parent: computeGallery
     properties: {
       identifier: {
-        sku: customImage.sku
-        offer: customImage.offer
-        publisher: customImage.publisher
+        sku: customImage.properties.identifier.sku
+        offer: customImage.properties.identifier.offer
+        publisher: customImage.properties.identifier.publisher
       }
-      osState: customImage.osState
-      osType: customImage.osType
+      osState: customImage.properties.osState
+      osType: customImage.properties.osType
     }
   }
 ]
