@@ -77,6 +77,7 @@ resource devCenterGallery 'Microsoft.DevCenter/devcenters/galleries@2024-10-01-p
     galleryResourceId: computeGallery.id
   }
 }
+
 @description('Dev Center DevBox Definitions')
 resource devBoxDefinitions 'Microsoft.DevCenter/devcenters/devboxdefinitions@2024-10-01-preview' = [
   for devBoxDefinition in settings.devBoxDefinitions: {
