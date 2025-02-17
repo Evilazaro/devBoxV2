@@ -16,8 +16,8 @@ param environment string
 
 @description('Landing Zone Information')
 var landingZone = environment == 'dev'
-  ? loadJsonContent('../src/resources/resourceOrganization/settings/dev/resourceOrganizationSettings.json')
-  : loadJsonContent('../src/resources/resourceOrganization/settings/prod/resourceOrganizationSettings.json')
+  ? loadJsonContent('settings/resourceOrganization/resourceOrganizationSettings-dev.json')
+  : loadJsonContent('settings/resourceOrganization/resourceOrganizationSettings-prod.json')
 
 @description('Connectivity Resource Group')
 resource connectivityResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' = {

@@ -10,8 +10,8 @@ param name string
 param environment string
 
 var networkSettings = environment == 'dev'
-  ? loadJsonContent('settings/dev/networkSettings.json')
-  : loadJsonContent('settings/prod/networkSettings.json')
+  ? loadJsonContent('../../../deploy/settings/connectivity/networkSettings-dev.json')
+  : loadJsonContent('../../../deploy/settings/connectivity/networkSettings-prod.json')
 
 @description('Virtual Network')
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-05-01' = {
