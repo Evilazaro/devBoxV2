@@ -91,7 +91,9 @@ resource devBoxDefinitions 'Microsoft.DevCenter/devcenters/devboxdefinitions@202
     tags: devBoxDefinitionsSettings.tags
     properties: {
       imageReference: {
-        id: '${resourceId('Microsoft.DevCenter/devcenters', devCenter.name)}/galleries/default/images/${devBoxDefinitionsSettings.image}'
+        id: devBoxDefinitionsSettings.default
+          ? '${resourceId('Microsoft.DevCenter/devcenters', devCenter.name)}/galleries/default/images/${devBoxDefinitionsSettings.image}'
+          : '${resourceId('Microsoft.DevCenter/devcenters', devCenter.name)}/galleries/${devCenterGallery.name}/images/${devBoxDefinitionsSettings.image}'
       }
       hibernateSupport: devboxDefinition.hibernateSupport
       sku: {

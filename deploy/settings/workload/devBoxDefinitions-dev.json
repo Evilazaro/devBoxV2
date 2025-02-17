@@ -5,6 +5,7 @@
         "imageVersion": "latest",
         "sku": "general_i_32c128gb512ssd_v2",
         "hibernateSupport": "disabled",
+        "default": true,
         "tags": {
             "environment": "dev"
         }
@@ -15,6 +16,7 @@
         "imageVersion": "latest",
         "sku": "general_i_16c64gb256ssd_v2",
         "hibernateSupport": "Enabled",
+        "default": true,
         "tags": {
             "environment": "dev"
         }
