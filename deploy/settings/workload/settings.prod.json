@@ -3,7 +3,7 @@
     "microsoftHostedNetworkEnableStatus": "Enabled",
     "installAzureMonitorAgentEnableStatus": "Enabled",
     "tags": {
-        "environment": "prod"
+        "environment": "dev"
     },
     "identity": {
         "type": "SystemAssigned",
@@ -15,5 +15,9 @@
             "331c37c6-af14-46d9-b9f4-e1909e1b95a0"
         ],
         "userAssignedIdentities": {}
+    },
+    "computeGallery": {
+        "name": "contosoComputeGallery",
+        "create": true
     }
 }

@@ -14,8 +14,8 @@ param networkConnections array
 
 @description('Dev Center settings')
 var settings = environment == 'dev'
-  ? loadJsonContent('../../deploy/settings/workload/workloadSettings-dev.json')
-  : loadJsonContent('../../deploy/settings/workload/workloadSettings-prod.json')
+  ? loadJsonContent('../../deploy/settings/workload/settings.dev.json')
+  : loadJsonContent('../../deploy/settings/workload/settings.prod.json')
 
 // var devBoxDefinitionsSettings = environment == 'dev'
 //   ? loadJsonContent('../../deploy/settings/workload/devBoxDefinitions-dev.json')
@@ -68,8 +68,8 @@ resource vNetAttachment 'Microsoft.DevCenter/devcenters/attachednetworks@2024-10
 ]
 
 @description('Compute Gallery')
-resource computeGallery 'Microsoft.Compute/galleries@2024-03-03' = {
-  name: 'devCenterGallery'
+resource computeGallery 'Microsoft.Compute/galleries@2024-03-03' = if (settings.computeGallery.create) {
+  name: settings.computeGallery.name
   location: resourceGroup().location
   tags: settings.tags
   properties: {
@@ -77,12 +77,21 @@ resource computeGallery 'Microsoft.Compute/galleries@2024-03-03' = {
   }
 }
 
+@description('DevCenter Compute Gallery')
+resource devCenterGallery 'Microsoft.DevCenter/devcenters/galleries@2024-10-01-preview' = {
+  name: computeGallery.name
+  parent: devCenter
+  properties: {
+    galleryResourceId: computeGallery.id
+  }
+}
+
 @description('Compute Gallery Image Definitions')
 resource imageDefinitions 'Microsoft.Compute/galleries/images@2024-03-03' = [
   for vmImageSetting in vmImageSettings: {
     name: vmImageSetting.imageDefinition.name
-    location: resourceGroup().location
     parent: computeGallery
+    location: resourceGroup().location
     properties: {
       hyperVGeneration: 'V2'
       architecture: 'x64'
@@ -113,9 +122,41 @@ resource imageDefinitions 'Microsoft.Compute/galleries/images@2024-03-03' = [
   }
 ]
 
+@description('Image Defiinitions Created')
+output imageDefinitionsCreated array = [
+  for (vmImageSetting, i) in vmImageSettings: {
+    name: imageDefinitions[i].name
+  }
+]
+
+resource imageVersion 'Microsoft.Compute/galleries/images/versions@2024-03-03' = [
+  for (vmImageSetting,i) in vmImageSettings: {
+    name: '${imageDefinitions[i].name}'
+    parent: imageDefinitions[0]
+    location: resourceGroup().location
+    properties: {
+      storageProfile: {
+        source: {
+          id: imageDefinitions[0].id
+        }
+      }
+      publishingProfile: {
+        storageAccountType: 'PremiumV2_LRS'
+        replicaCount: 1
+        targetRegions: [
+          {
+            name: 'eastus2'
+            regionalReplicaCount: 1
+          }
+        ]
+      }
+    }
+  }
+]
+
 // resource vmImageTemplates 'Microsoft.VirtualMachineImages/imageTemplates@2024-02-01' = [
-//   for (vmImageSetting, i) in vmImageSettings: {
-//     name: '${vmImageSetting[i].imageDefinition.name}'
+//   for vmImageSetting in vmImageSettings: {
+//     name: vmImageSetting.imageDefinition.name
 //     location: resourceGroup().location
 //     identity: {
 //       type: 'UserAssigned'
@@ -132,7 +173,7 @@ resource imageDefinitions 'Microsoft.Compute/galleries/images@2024-03-03' = [
 //           galleryImageId: resourceId(
 //             'Microsoft.Compute/galleries/images/versions',
 //             computeGallery.name,
-//             imageDefinitions[i].name,
+//             vmImageSetting.imageDefinition.name,
 //             '1.0.0'
 //           )
 //           replicationRegions: [
@@ -143,25 +184,19 @@ resource imageDefinitions 'Microsoft.Compute/galleries/images@2024-03-03' = [
 //         }
 //       ]
 //       source: {
-//         offer: vmImageSetting[i].imageTemplate.source.offer
-//         publisher: vmImageSetting[i].imageTemplate.source.publisher
-//         sku: vmImageSetting[i].imageTemplate.source.sku
+//         offer: vmImageSetting.imageTemplate.source.offer
+//         publisher: vmImageSetting.imageTemplate.source.publisher
+//         sku: vmImageSetting.imageTemplate.source.sku
 //         type: 'PlatformImage'
 //         version: 'latest'
 //       }
 //       vmProfile: {
-//         osDiskSizeGB: 127
-//         vmSize: 'Standard_DS1_v2'
+//         osDiskSizeGB: vmImageSetting.imageTemplate.vmProfile.osDiskSizeGB
+//         vmSize: vmImageSetting.imageTemplate.vmProfile.vmSize
 //       }
 //     }
+//     dependsOn: [
+//       imageDefinitions
+//     ]
 //   }
 // ]
-
-// @description('DevCenter Compute Gallery')
-// resource devCenterGallery 'Microsoft.DevCenter/devcenters/galleries@2024-10-01-preview' = {
-//   name: computeGallery.name
-//   parent: devCenter
-//   properties: {
-//     galleryResourceId: computeGallery.id
-//   }
-// }
