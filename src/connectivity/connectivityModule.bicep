@@ -48,7 +48,7 @@ resource networkConnection 'Microsoft.DevCenter/networkConnections@2024-10-01-pr
 
 @description('Network Connections created')
 output networkConnections array = [
-  for (connection,i) in networkSettings.subnets: {
+  for (connection, i) in networkSettings.subnets: {
     id: networkConnection[i].id
     name: networkConnection[i].name
   }

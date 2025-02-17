@@ -32,7 +32,7 @@ resource project 'Microsoft.DevCenter/projects@2024-10-01-preview' = {
 
 @description('Dev Center Projects Role Assignments')
 module roleAssignmentsProjects '../../identity/roleAssignmentsResource.bicep' = {
-  name: name
+  name: 'roleAssignments:${project.name}'
   params: {
     scope: 'subscription'
     principalId: project.identity.principalId

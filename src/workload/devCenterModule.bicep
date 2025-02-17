@@ -133,12 +133,14 @@ resource devCenterEnvironments 'Microsoft.DevCenter/devcenters/environmentTypes@
 ]
 
 @description('Dev Center Projects')
-module projects 'projects/projectModule.bicep'= [for project in settings.projects: {
-  name: project.name
-  params: {
-    name: project.name
-    catalogs: project.catalogs
-    devCenterId: devCenter.id
-    roles: project.identity.roles
+module projects 'projects/projectModule.bicep' = [
+  for project in settings.projects: {
+    name: 'Project:${project.name}'
+    params: {
+      name: project.name
+      catalogs: project.catalogs
+      devCenterId: devCenter.id
+      roles: project.identity.roles
+    }
   }
-}]
+]
