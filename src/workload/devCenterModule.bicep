@@ -120,3 +120,40 @@ resource devCenterCatalogs 'Microsoft.DevCenter/devcenters/catalogs@2024-10-01-p
         }
   }
 ]
+
+@description('Dev Center Environments')
+resource devCenterEnvironments 'Microsoft.DevCenter/devcenters/environmentTypes@2024-10-01-preview' = [
+  for environment in settings.environmentTypes: {
+    name: environment.name
+    parent: devCenter
+    properties: {
+      displayName: environment.name
+    }
+  }
+]
+
+@description('Dev Center Projects')
+resource projects 'Microsoft.DevCenter/projects@2024-10-01-preview' = [
+  for project in settings.projects: {
+    name: project.name
+    location: resourceGroup().location
+    identity: {
+      type: project.identity.type
+    }
+    properties: {
+      devCenterId: devCenter.id
+    }
+  }
+]
+
+@description('Dev Center Projects Role Assignments')
+module roleAssignmentsProjects '../identity/roleAssignmentsResource.bicep' = [
+  for (identity,i) in settings.projects: {
+    name: identity[i].name
+    params: {
+      scope: 'subscription'
+      principalId: projects[i].identity.principalId
+      roles: identity[i].identity.roles
+    }
+  }
+]
