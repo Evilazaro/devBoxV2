@@ -3,28 +3,28 @@
         "name": "Connectivity",
         "description": "connectivity",
         "tags": {
-            "environment": "dev"
+            "environment": "prod"
         }
     },
     "identity": {
         "name": "Identity",
         "description": "identity",
         "tags": {
-            "environment": "dev"
+            "environment": "prod"
         }
     },
     "management": {
         "name": "Management",
         "description": "management",
         "tags": {
-            "environment": "dev"
+            "environment": "prod"
         }
     },
     "workload": {
         "name": "Workload",
-        "description": "devExp",
+        "description": "prodExp",
         "tags": {
-            "environment": "dev"
+            "environment": "prod"
         }
     }
 }
