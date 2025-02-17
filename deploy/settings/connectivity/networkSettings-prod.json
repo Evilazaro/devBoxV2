@@ -13,6 +13,6 @@
         }
     ],
     "tags": {
-        "environment": "dev"
+        "environment": "prod"
     }
 }

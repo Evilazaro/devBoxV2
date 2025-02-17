@@ -21,7 +21,7 @@
         }
     },
     "workload": {
-        "name": "RG",
+        "name": "Workload",
         "description": "prodExp",
         "tags": {
             "environment": "prod"
