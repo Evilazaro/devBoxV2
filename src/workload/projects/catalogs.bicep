@@ -1,4 +1,4 @@
-@description('Project')
+@description('Project name')
 param projectName string
 
 @description('Project Catalogs')
