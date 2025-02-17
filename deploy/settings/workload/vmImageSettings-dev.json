@@ -1,12 +1,16 @@
-[
-    {
-        "imageDefinition": {
+{
+    "imageDefinitions": [
+        {
             "name": "backEndTemplate",
             "publisher": "Contoso",
             "offer": "BackEndEngineer",
-            "sku": "backEnd"
-        },
-        "imageTemplate": {
+            "sku": "backEnd",
+            "version": "1.0.0"
+        }
+    ],
+    "imageTemplates": [
+        {
+            "name":"backEndTemplate",
             "source": {
                 "offer": "windows-11",
                 "publisher": "microsoftwindowsdesktop",
@@ -19,5 +23,5 @@
                 "vmSize": "Standard_DS1_v2"
             }
         }
-    }
-]
+    ]
+}

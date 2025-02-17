@@ -17,14 +17,6 @@ var settings = environment == 'dev'
   ? loadJsonContent('../../deploy/settings/workload/settings.dev.json')
   : loadJsonContent('../../deploy/settings/workload/settings.prod.json')
 
-// var devBoxDefinitionsSettings = environment == 'dev'
-//   ? loadJsonContent('../../deploy/settings/workload/devBoxDefinitions-dev.json')
-//   : loadJsonContent('../../deploy/settings/workload/devBoxDefinitions-prod.json')
-
-var vmImageSettings = environment == 'dev'
-  ? loadJsonContent('../../deploy/settings/workload/vmImageSettings-dev.json')
-  : loadJsonContent('../../deploy/settings/workload/vmImageSettings-prod.json')
-
 @description('Dev Center Resource')
 resource devCenter 'Microsoft.DevCenter/devcenters@2024-10-01-preview' = {
   name: name
@@ -85,118 +77,35 @@ resource devCenterGallery 'Microsoft.DevCenter/devcenters/galleries@2024-10-01-p
     galleryResourceId: computeGallery.id
   }
 }
-
-@description('Compute Gallery Image Definitions')
-resource imageDefinitions 'Microsoft.Compute/galleries/images@2024-03-03' = [
-  for vmImageSetting in vmImageSettings: {
-    name: vmImageSetting.imageDefinition.name
-    parent: computeGallery
+@description('Dev Center DevBox Definitions')
+resource devBoxDefinitions 'Microsoft.DevCenter/devcenters/devboxdefinitions@2024-10-01-preview' = [
+  for devBoxDefinition in settings.devBoxDefinitions: {
+    name: devBoxDefinition.name
     location: resourceGroup().location
+    parent: devCenter
     properties: {
-      hyperVGeneration: 'V2'
-      architecture: 'x64'
-      features: [
-        {
-          name: 'SecurityType'
-          value: 'TrustedLaunchSupported'
-        }
-      ]
-      identifier: {
-        publisher: vmImageSetting.imageDefinition.publisher
-        offer: vmImageSetting.imageDefinition.offer
-        sku: vmImageSetting.imageDefinition.sku
+      hibernateSupport: devBoxDefinition.hibernateSupport
+      imageReference: {
+        id: devBoxDefinition.default
+          ? resourceId(
+              'Microsoft.DevCenter/devcenters/galleries',
+              '/default/',
+              '/images/',
+              devBoxDefinition.image,
+              '/version/',
+              devBoxDefinition.imageVersion
+            )
+          : resourceId(
+              'Microsoft.DevCenter/devcenters/galleries/',
+              '/${computeGallery.name}/',
+              '/images/',
+              devBoxDefinition.image,
+              '/version/',
+              devBoxDefinition.imageVersion
+            )
       }
-      osState: 'Generalized'
-      osType: 'Windows'
-      recommended: {
-        vCPUs: {
-          min: 1
-          max: 16
-        }
-        memory: {
-          min: 1
-          max: 32
-        }
-      }
+      osStorageType: devBoxDefinition.osStorageType
+      sku: devBoxDefinition.sku
     }
   }
 ]
-
-@description('Image Defiinitions Created')
-output imageDefinitionsCreated array = [
-  for (vmImageSetting, i) in vmImageSettings: {
-    name: imageDefinitions[i].name
-  }
-]
-
-resource imageVersion 'Microsoft.Compute/galleries/images/versions@2024-03-03' = [
-  for (vmImageSetting,i) in vmImageSettings: {
-    name: '${imageDefinitions[i].name}'
-    parent: imageDefinitions[0]
-    location: resourceGroup().location
-    properties: {
-      storageProfile: {
-        source: {
-          id: imageDefinitions[0].id
-        }
-      }
-      publishingProfile: {
-        storageAccountType: 'PremiumV2_LRS'
-        replicaCount: 1
-        targetRegions: [
-          {
-            name: 'eastus2'
-            regionalReplicaCount: 1
-          }
-        ]
-      }
-    }
-  }
-]
-
-// resource vmImageTemplates 'Microsoft.VirtualMachineImages/imageTemplates@2024-02-01' = [
-//   for vmImageSetting in vmImageSettings: {
-//     name: vmImageSetting.imageDefinition.name
-//     location: resourceGroup().location
-//     identity: {
-//       type: 'UserAssigned'
-//       userAssignedIdentities: {
-//         '/subscriptions/6a4029ea-399b-4933-9701-436db72883d4/resourceGroups/DevExp-Connectivity-dev/providers/Microsoft.ManagedIdentity/userAssignedIdentities/MyApp': {}
-//       }
-//     }
-//     properties: {
-//       buildTimeoutInMinutes: 60
-//       distribute: [
-//         {
-//           artifactTags: {}
-//           excludeFromLatest: false
-//           galleryImageId: resourceId(
-//             'Microsoft.Compute/galleries/images/versions',
-//             computeGallery.name,
-//             vmImageSetting.imageDefinition.name,
-//             '1.0.0'
-//           )
-//           replicationRegions: [
-//             'eastus2'
-//           ]
-//           runOutputName: 'runOutputImageVersion'
-//           type: 'SharedImage'
-//         }
-//       ]
-//       source: {
-//         offer: vmImageSetting.imageTemplate.source.offer
-//         publisher: vmImageSetting.imageTemplate.source.publisher
-//         sku: vmImageSetting.imageTemplate.source.sku
-//         type: 'PlatformImage'
-//         version: 'latest'
-//       }
-//       vmProfile: {
-//         osDiskSizeGB: vmImageSetting.imageTemplate.vmProfile.osDiskSizeGB
-//         vmSize: vmImageSetting.imageTemplate.vmProfile.vmSize
-//       }
-//     }
-//     dependsOn: [
-//       imageDefinitions
-//     ]
-//   }
-// ]
