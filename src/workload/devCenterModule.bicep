@@ -88,12 +88,11 @@ resource devBoxDefinitions 'Microsoft.DevCenter/devcenters/devboxdefinitions@202
     name: devboxDefinition.name
     location: resourceGroup().location
     parent: devCenter
-    tags: devBoxDefinitionsSettings.tags
     properties: {
       imageReference: {
-        id: devBoxDefinitionsSettings.default
-          ? '${resourceId('Microsoft.DevCenter/devcenters', devCenter.name)}/galleries/default/images/${devBoxDefinitionsSettings.image}'
-          : '${resourceId('Microsoft.DevCenter/devcenters', devCenter.name)}/galleries/${devCenterGallery.name}/images/${devBoxDefinitionsSettings.image}'
+        id: devboxDefinition.default
+          ? '${resourceId('Microsoft.DevCenter/devcenters', devCenter.name)}/galleries/default/images/${devboxDefinition.image}'
+          : '${resourceId('Microsoft.DevCenter/devcenters', devCenter.name)}/galleries/${devCenterGallery.name}/images/${devboxDefinition.image}'
       }
       hibernateSupport: devboxDefinition.hibernateSupport
       sku: {

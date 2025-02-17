@@ -4,7 +4,7 @@
         "image": "microsoftvisualstudio_visualstudioplustools_vs-2022-ent-general-win11-m365-gen2",
         "imageVersion": "latest",
         "sku": "general_i_32c128gb512ssd_v2",
-        "hibernateSupport": "disabled",
+        "hibernateSupport": "Disabled",
         "tags": {
             "environment": "dev"
         }
