@@ -1,0 +1,22 @@
+[
+    {
+        "name": "backEndEngineer",
+        "image": "microsoftvisualstudio_visualstudioplustools_vs-2022-ent-general-win11-m365-gen2",
+        "imageVersion": "latest",
+        "sku": "general_i_32c128gb512ssd_v2",
+        "hibernateSupport": "disabled",
+        "tags": {
+            "environment": "dev"
+        }
+    },
+    {
+        "name": "frontEndEngineer",
+        "image": "microsoftwindowsdesktop_windows-ent-cpc_win11-21h2-ent-cpc-m365",
+        "imageVersion": "latest",
+        "sku": "general_i_16c64gb256ssd_v2",
+        "hibernateSupport": "Enabled",
+        "tags": {
+            "environment": "prod"
+        }
+    }
+]

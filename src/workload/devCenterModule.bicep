@@ -17,6 +17,10 @@ var settings = environment == 'dev'
   ? loadJsonContent('../../deploy/settings/workload/workloadSettings-dev.json')
   : loadJsonContent('../../deploy/settings/workload/workloadSettings-prod.json')
 
+var devBoxDefinitionsSettings = environment == 'dev'
+  ? loadJsonContent('../../deploy/settings/workload/devBoxDefinitions-dev.json')
+  : loadJsonContent('../../deploy/settings/workload/devBoxDefinitions-prod.json')
+
 @description('Dev Center Resource')
 resource devCenter 'Microsoft.DevCenter/devcenters@2024-10-01-preview' = {
   name: name
@@ -39,7 +43,7 @@ resource devCenter 'Microsoft.DevCenter/devcenters@2024-10-01-preview' = {
   }
 }
 
-module roleAssignments '../identity/roleAssignmentsResource.bicep'= {
+module roleAssignments '../identity/roleAssignmentsResource.bicep' = {
   name: 'roleAssignments'
   params: {
     scope: 'subscription'
@@ -73,4 +77,26 @@ resource computeGallery 'Microsoft.Compute/galleries@2024-03-03' = {
 resource devCenterGallery 'Microsoft.DevCenter/devcenters/galleries@2024-10-01-preview' = {
   name: computeGallery.name
   parent: devCenter
+  properties: {
+    galleryResourceId: computeGallery.id
+  }
 }
+
+@description('Dev Box Definition')
+resource devBoxDefinitions 'Microsoft.DevCenter/devcenters/devboxdefinitions@2024-10-01-preview' = [
+  for devboxDefinition in devBoxDefinitionsSettings: {
+    name: devboxDefinition.name
+    location: resourceGroup().location
+    parent: devCenter
+    tags: devBoxDefinitionsSettings.tags
+    properties: {
+      imageReference: {
+        id: '${resourceId('Microsoft.DevCenter/devcenters', devCenter.name)}/galleries/default/images/${devBoxDefinitionsSettings.image}'
+      }
+      hibernateSupport: devboxDefinition.hibernateSupport
+      sku: {
+        name: devboxDefinition.sku
+      }
+    }
+  }
+]
