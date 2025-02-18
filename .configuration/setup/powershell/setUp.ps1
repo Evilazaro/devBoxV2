@@ -7,10 +7,10 @@ $displayName = "ContosoDevEx GitHub Actions Enterprise App"
 # Function to set up deployment credentials
 function Set-DeploymentCredentials {
     param (
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$appName,
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$displayName
     )
 
@@ -24,7 +24,8 @@ function Set-DeploymentCredentials {
         }
 
         Write-Output "Deployment credentials set up successfully."
-    } catch {
+    }
+    catch {
         Write-Error "Error: $_"
         return 1
     }
@@ -34,7 +35,8 @@ function Set-DeploymentCredentials {
 try {
     Clear-Host
     Set-DeploymentCredentials -appName $appName -displayName $displayName
-} catch {
+}
+catch {
     Write-Error "Script execution failed: $_"
     exit 1
 }
