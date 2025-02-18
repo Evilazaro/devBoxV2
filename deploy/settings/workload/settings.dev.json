@@ -110,9 +110,12 @@
                 },
                 {
                     "name": "staging",
-                    "tags": {
-                        "environment": "test"
-                    }
+                    "roles": [
+                        {
+                            "id": "b24988ac-6180-42a0-ab88-20f7382dd24c",
+                            "properties": {}
+                        }
+                    ]
                 }
             ]
         },
@@ -152,7 +155,13 @@
                     ]
                 },
                 {
-                    "name": "prod"
+                    "name": "prod",
+                    "roles": [
+                        {
+                            "id": "b24988ac-6180-42a0-ab88-20f7382dd24c",
+                            "properties": {}
+                        }
+                    ]
                 }
             ]
         }
