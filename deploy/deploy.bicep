@@ -37,6 +37,13 @@ module connectivity '../src/connectivity/connectivityModule.bicep' = {
 }
 
 @description('Connectivity Resource Group')
+resource managementResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' = {
+  name: '${workloadName}-${landingZone.management.name}-${environment}'
+  location: location
+  tags: landingZone.management.tags
+}
+
+@description('Connectivity Resource Group')
 resource workloadResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' = {
   name: '${workloadName}-${landingZone.workload.name}-${environment}'
   location: location

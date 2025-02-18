@@ -13,9 +13,13 @@ param roles array
 @description('Environments')
 param environments array
 
+@description('Project Tags')
+param tags object
+
 resource project 'Microsoft.DevCenter/projects@2024-10-01-preview' = {
   name: name
   location: resourceGroup().location
+  tags: tags
   identity: {
     type: 'SystemAssigned'
   }
@@ -57,6 +61,7 @@ resource projectEnvironments 'Microsoft.DevCenter/projects/environmentTypes@2024
   for environment in environments: {
     name: environment.name
     parent: project
+    tags: environment.tags
     properties: {
       displayName: environment.name
       deploymentTargetId: subscription().id

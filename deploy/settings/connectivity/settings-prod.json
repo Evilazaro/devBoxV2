@@ -19,6 +19,12 @@
         }
     ],
     "tags": {
-        "environment": "dev"
+        "environment": "prod",
+        "division": "Platforms",
+        "team": "prodExp",
+        "project": "prodExp-prodBox",
+        "costCenter": "IT",
+        "owner": "Evilazaro",
+        "resources": "Network"
     }
 }

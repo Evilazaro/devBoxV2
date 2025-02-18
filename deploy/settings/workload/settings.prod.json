@@ -3,7 +3,12 @@
     "microsoftHostedNetworkEnableStatus": "Enabled",
     "installAzureMonitorAgentEnableStatus": "Enabled",
     "tags": {
-        "environment": "dev"
+        "environment": "prod",
+        "division": "Platforms",
+        "team": "DevExp",
+        "project": "DevExp-DevBox",
+        "costCenter": "IT",
+        "owner": "Evilazaro"
     },
     "identity": {
         "type": "SystemAssigned",
@@ -21,7 +26,15 @@
     },
     "computeGallery": {
         "name": "contosoComputeGallery",
-        "create": true
+        "create": true,
+        "tags": {
+            "environment": "prod",
+            "division": "Platforms",
+            "team": "DevExp",
+            "project": "DevExp-DevBox",
+            "costCenter": "IT",
+            "owner": "Evilazaro"
+        }
     },
     "devBoxDefinitions": [
         {
@@ -32,7 +45,12 @@
             "hibernateSupport": "Disabled",
             "default": true,
             "tags": {
-                "environment": "dev"
+                "environment": "prod",
+                "division": "Platforms",
+                "team": "DevExp",
+                "project": "DevExp-DevBox",
+                "costCenter": "IT",
+                "owner": "Evilazaro"
             }
         },
         {
@@ -43,7 +61,12 @@
             "hibernateSupport": "Enabled",
             "default": true,
             "tags": {
-                "environment": "dev"
+                "environment": "prod",
+                "division": "Platforms",
+                "team": "DevExp",
+                "project": "DevExp-DevBox",
+                "costCenter": "IT",
+                "owner": "Evilazaro"
             }
         }
     ],
@@ -53,7 +76,7 @@
             "name": "customTasks",
             "uri": "https://github.com/Evilazaro/DevExp-DevBox.git",
             "branch": "main",
-            "path": "deploy/settings/workload/tasks"
+            "path": ".configuration/devcenter/tasks"
         }
     ],
     "projects": [
@@ -79,7 +102,7 @@
                     "name": "environments",
                     "uri": "https://github.com/Evilazaro/DevExp-DevBox.git",
                     "branch": "main",
-                    "path": "deploy/settings/workload/tasks"
+                    "path": ".configuration"
                 },
                 {
                     "gitHub": true,
@@ -97,7 +120,15 @@
                             "id": "b24988ac-6180-42a0-ab88-20f7382dd24c",
                             "properties": {}
                         }
-                    ]
+                    ],
+                    "tags": {
+                        "environment": "prod",
+                        "division": "Platforms",
+                        "team": "DevExp",
+                        "project": "DevExp-DevBox",
+                        "costCenter": "IT",
+                        "owner": "Evilazaro"
+                    }
                 },
                 {
                     "name": "prod",
@@ -106,7 +137,15 @@
                             "id": "b24988ac-6180-42a0-ab88-20f7382dd24c",
                             "properties": {}
                         }
-                    ]
+                    ],
+                    "tags": {
+                        "environment": "prod",
+                        "division": "Platforms",
+                        "team": "DevExp",
+                        "project": "DevExp-DevBox",
+                        "costCenter": "IT",
+                        "owner": "Evilazaro"
+                    }
                 },
                 {
                     "name": "staging",
@@ -115,9 +154,25 @@
                             "id": "b24988ac-6180-42a0-ab88-20f7382dd24c",
                             "properties": {}
                         }
-                    ]
+                    ],
+                    "tags": {
+                        "environment": "prod",
+                        "division": "Platforms",
+                        "team": "DevExp",
+                        "project": "DevExp-DevBox",
+                        "costCenter": "IT",
+                        "owner": "Evilazaro"
+                    }
                 }
-            ]
+            ],
+            "tags": {
+                "environment": "prod",
+                "division": "Platforms",
+                "team": "DevExp",
+                "project": "DevExp-DevBox",
+                "costCenter": "IT",
+                "owner": "Evilazaro"
+            }
         },
         {
             "name": "identityProvider",
@@ -141,7 +196,7 @@
                     "name": "environments",
                     "uri": "https://github.com/Evilazaro/DevExp-DevBox.git",
                     "branch": "main",
-                    "path": "deploy/settings/workload/tasks"
+                    "path": "./configuration/devcenter/tasks"
                 }
             ],
             "environments": [
@@ -152,7 +207,15 @@
                             "id": "b24988ac-6180-42a0-ab88-20f7382dd24c",
                             "properties": {}
                         }
-                    ]
+                    ],
+                    "tags": {
+                        "environment": "prod",
+                        "division": "Platforms",
+                        "team": "DevExp",
+                        "project": "DevExp-DevBox",
+                        "costCenter": "IT",
+                        "owner": "Evilazaro"
+                    }
                 },
                 {
                     "name": "prod",
@@ -161,28 +224,59 @@
                             "id": "b24988ac-6180-42a0-ab88-20f7382dd24c",
                             "properties": {}
                         }
-                    ]
+                    ],
+                    "tags": {
+                        "environment": "prod",
+                        "division": "Platforms",
+                        "team": "DevExp",
+                        "project": "DevExp-DevBox",
+                        "costCenter": "IT",
+                        "owner": "Evilazaro"
+                    }
                 }
-            ]
+            ],
+            "tags": {
+                "environment": "prod",
+                "division": "Platforms",
+                "team": "DevExp",
+                "project": "DevExp-DevBox",
+                "costCenter": "IT",
+                "owner": "Evilazaro"
+            }
         }
     ],
     "environmentTypes": [
         {
             "name": "dev",
             "tags": {
-                "environment": "dev"
+                "environment": "prod",
+                "division": "Platforms",
+                "team": "DevExp",
+                "project": "DevExp-DevBox",
+                "costCenter": "IT",
+                "owner": "Evilazaro"
             }
         },
         {
             "name": "prod",
             "tags": {
-                "environment": "prod"
+                "environment": "prod",
+                "division": "Platforms",
+                "team": "DevExp",
+                "project": "DevExp-DevBox",
+                "costCenter": "IT",
+                "owner": "Evilazaro"
             }
         },
         {
             "name": "staging",
             "tags": {
-                "environment": "test"
+                "environment": "prod",
+                "division": "Platforms",
+                "team": "DevExp",
+                "project": "DevExp-DevBox",
+                "costCenter": "IT",
+                "owner": "Evilazaro"
             }
         }
     ]
