@@ -13,6 +13,9 @@ param roles array
 @description('Environments')
 param environments array
 
+@description('DevBox Pools')
+param devBoxPools array
+
 @description('Project Tags')
 param tags object
 
@@ -72,3 +75,12 @@ resource projectEnvironments 'Microsoft.DevCenter/projects/environmentTypes@2024
     }
   }
 ]
+
+@description('Project DevBox Pools')
+module projectDevBoxPools 'devboxPools.bicep' = {
+  name: '${project.name}-devBoxPools'
+  params: {
+    projectName: project.name
+    pools: devBoxPools
+  }
+}
