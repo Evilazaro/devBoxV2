@@ -173,7 +173,7 @@
                 },
                 {
                     "name": "frontEndEngineer",
-                    "devBoxDefinitionName": "fronEndEngineer",
+                    "devBoxDefinitionName": "frontEndEngineer",
                     "networkConnectionName": "eShop"
                 }
             ],
@@ -255,7 +255,7 @@
                 },
                 {
                     "name": "frontEndEngineer",
-                    "devBoxDefinitionName": "fronEndEngineer",
+                    "devBoxDefinitionName": "frontEndEngineer",
                     "networkConnectionName": "identityProvider"
                 }
             ],
