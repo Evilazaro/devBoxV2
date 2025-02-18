@@ -1,6 +1,6 @@
 using 'deploy.bicep'
 
-param workloadName = 'Nimbus'
+param workloadName = 'Contoso'
 
 param location = 'eastus2'
 

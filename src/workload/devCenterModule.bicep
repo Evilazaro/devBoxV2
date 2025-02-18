@@ -38,7 +38,6 @@ resource devCenter 'Microsoft.DevCenter/devcenters@2024-10-01-preview' = {
     }
   }
 }
-
 module roleAssignments '../identity/roleAssignmentsResource.bicep' = {
   name: 'roleAssignments'
   scope: resourceGroup()
@@ -149,7 +148,12 @@ module projects 'projects/projectModule.bicep' = [
       devCenterId: devCenter.id
       roles: project.identity.roles
       environments: project.environments
+      devBoxPools: project.pools
       tags: project.tags
     }
+    dependsOn: [
+     vNetAttachment
+     devBoxDefinitions
+    ]
   }
 ]

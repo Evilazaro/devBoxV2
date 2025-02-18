@@ -165,6 +165,18 @@
                     }
                 }
             ],
+            "pools": [
+                {
+                    "name": "backEndEngineer",
+                    "devBoxDefinitionName": "backEndEngineer",
+                    "networkConnectionName": "eShop"
+                },
+                {
+                    "name": "frontEndEngineer",
+                    "devBoxDefinitionName": "frontEndEngineer",
+                    "networkConnectionName": "eShop"
+                }
+            ],
             "tags": {
                 "environment": "prod",
                 "division": "Platforms",
@@ -233,6 +245,18 @@
                         "costCenter": "IT",
                         "owner": "Evilazaro"
                     }
+                }
+            ],
+            "pools": [
+                {
+                    "name": "backEndEngineer",
+                    "devBoxDefinitionName": "backEndEngineer",
+                    "networkConnectionName": "identityProvider"
+                },
+                {
+                    "name": "frontEndEngineer",
+                    "devBoxDefinitionName": "frontEndEngineer",
+                    "networkConnectionName": "identityProvider"
                 }
             ],
             "tags": {
