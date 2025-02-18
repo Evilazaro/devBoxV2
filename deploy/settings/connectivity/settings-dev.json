@@ -1,18 +1,18 @@
 {
     "createVirtualNetwork": true,
-    "name": "vnet1",
+    "name": "devexp",
     "addressPrefixes": [
         "10.0.0.0/16"
     ],
     "subnets": [
         {
-            "name": "subnet1",
+            "name": "eShop",
             "properties": {
                 "addressPrefix": "10.0.0.0/24"
             }
         },
         {
-            "name": "subnet2",
+            "name": "identityProvider",
             "properties": {
                 "addressPrefix": "10.0.1.0/24"
             }

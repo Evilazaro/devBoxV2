@@ -151,5 +151,9 @@ module projects 'projects/projectModule.bicep' = [
       environments: project.environments
       tags: project.tags
     }
+    dependsOn: [
+     vNetAttachment
+     devBoxDefinitions
+    ]
   }
 ]
