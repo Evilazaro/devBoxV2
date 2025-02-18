@@ -19,10 +19,11 @@ on:
         required: true
         default: 'eastus2'
         type: string
-
-env:
-  devBoxResourceGroupName: "${{ inputs.workloadName }}-DevExp-RG"
-  connectivityResourceGroupName: "${{ inputs.workloadName }}-DevExp-Connectivity-RG"
+      environment:
+        description: 'Environment for the workload'
+        required: true
+        default: 'dev'
+        type: string
 
 jobs:
   Build:
@@ -78,22 +79,14 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # Grant execute permissions to the deployment script
-      - name: Grant execute permissions to the script
-        run: chmod +x ./.configuration/bash/deployResourcesOrganization.sh
-
-      # Deploy the Landing Zone Resources using the deployment script
-      - name: Deploy Landing Zone Resources for ${{ inputs.workloadName }}
-        run: ./.configuration/bash/deployResourcesOrganization.sh ${{ env.devBoxResourceGroupName }} ${{ env.connectivityResourceGroupName }} ${{ inputs.location}}
-
       - name: Deploy Dev Box DevCenter Resources for ${{ inputs.workloadName }} to Azure
         shell: bash
         id: deploy-dev-center
         run: |
-          az deployment group create  \
-            --resource-group ${{ env.devBoxResourceGroupName }} \
+          az deployment sub create  \
             --template-file ./deploy/deploy.bicep \
             --parameters ./deploy/params.bicepparam \
             --parameters workloadName=${{ inputs.workloadName }} \
-                rgConnectivityName=${{ env.connectivityResourceGroupName }} \
+                         location=${{ inputs.location }} \
+                          environment=${{ inputs.environment }} \
             --mode Incremental
