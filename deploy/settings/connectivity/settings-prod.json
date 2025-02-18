@@ -24,6 +24,7 @@
         "team": "DevExp",
         "project": "DevExp-DevBox",
         "costCenter": "IT",
-        "owner": "Evilazaro"
+        "owner": "Evilazaro",
+        "resources": "Network"
     }
 }
