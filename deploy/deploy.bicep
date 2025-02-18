@@ -1,7 +1,7 @@
 targetScope = 'subscription'
 
 @description('Solution Name')
-param solutionName string
+param workloadName string
 
 @description('Location for the deployment')
 param location string
@@ -21,7 +21,7 @@ var landingZone = environment == 'dev'
 
 @description('Connectivity Resource Group')
 resource connectivityResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' = {
-  name: '${solutionName}-${landingZone.connectivity.name}-${environment}'
+  name: '${workloadName}-${landingZone.connectivity.name}-${environment}'
   location: location
   tags: landingZone.connectivity.tags
 }
@@ -31,14 +31,14 @@ module connectivity '../src/connectivity/connectivityModule.bicep' = {
   scope: connectivityResourceGroup
   name: 'connectivity'
   params: {
-    name: '${solutionName}-${uniqueString(solutionName,connectivityResourceGroup.id)}'
+    name: '${workloadName}-${uniqueString(workloadName,connectivityResourceGroup.id)}'
     environment: environment
   }
 }
 
 @description('Connectivity Resource Group')
 resource workloadResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' = {
-  name: '${solutionName}-${landingZone.workload.name}-${environment}'
+  name: '${workloadName}-${landingZone.workload.name}-${environment}'
   location: location
   tags: landingZone.workload.tags
 }
@@ -48,7 +48,7 @@ module workload '../src/workload/devCenterModule.bicep' = {
   scope: workloadResourceGroup
   name: 'devCenter'
   params: {
-    name: '${solutionName}-devCenter'
+    name: '${workloadName}-devCenter'
     networkConnections: connectivity.outputs.networkConnections
     environment: environment
   }

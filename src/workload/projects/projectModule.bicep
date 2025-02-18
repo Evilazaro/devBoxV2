@@ -62,7 +62,7 @@ resource projectEnvironments 'Microsoft.DevCenter/projects/environmentTypes@2024
       deploymentTargetId: subscription().id
       status: 'Enabled'
       creatorRoleAssignment: {
-        roles: environment.roles
+        roles: toObject(environment.roles, role => role.id, role => role.properties)
       }
     }
   }
