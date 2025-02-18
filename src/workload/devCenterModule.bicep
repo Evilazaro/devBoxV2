@@ -38,6 +38,13 @@ resource devCenter 'Microsoft.DevCenter/devcenters@2024-10-01-preview' = {
     }
   }
 }
+
+@description('Dev Center ID')
+output devCenterId string = devCenter.id
+
+@description('Dev Center Name')
+output devCenterName string = devCenter.name
+
 module roleAssignments '../identity/roleAssignmentsResource.bicep' = {
   name: 'roleAssignments'
   scope: resourceGroup()
@@ -47,6 +54,9 @@ module roleAssignments '../identity/roleAssignmentsResource.bicep' = {
     roles: settings.identity.roles
   }
 }
+
+@description('Dev Center Role Assignments')
+output roleAssignments object = roleAssignments.outputs
 
 @description('Deploys Network Connections for the Dev Center')
 resource vNetAttachment 'Microsoft.DevCenter/devcenters/attachednetworks@2024-10-01-preview' = [
@@ -59,6 +69,14 @@ resource vNetAttachment 'Microsoft.DevCenter/devcenters/attachednetworks@2024-10
   }
 ]
 
+@description('Network Connections')
+output vNetAttachmentId array = [
+  for connection in networkConnections: {
+    id: vNetAttachment[connection.name].id
+    name: connection.name
+  }
+]
+
 @description('Compute Gallery')
 resource computeGallery 'Microsoft.Compute/galleries@2024-03-03' = if (settings.computeGallery.create) {
   name: settings.computeGallery.name
@@ -68,6 +86,12 @@ resource computeGallery 'Microsoft.Compute/galleries@2024-03-03' = if (settings.
     description: 'Dev Center Compute Gallery'
   }
 }
+
+@description('Compute Gallery ID')
+output computeGalleryId string = computeGallery.id
+
+@description('Compute Gallery Name')
+output computeGalleryName string = computeGallery.name
 
 @description('DevCenter Compute Gallery')
 resource devCenterGallery 'Microsoft.DevCenter/devcenters/galleries@2024-10-01-preview' = {
@@ -100,6 +124,14 @@ resource devBoxDefinitions 'Microsoft.DevCenter/devcenters/devboxdefinitions@202
   }
 ]
 
+@description('Dev Center DevBox Definitions')
+output devBoxDefinitions array = [
+  for devBoxDefinition in settings.devBoxDefinitions: {
+    id: devBoxDefinitions[devBoxDefinition.name].id
+    name: devBoxDefinition.name
+  }
+]
+
 @description('Dev Center Catalogs')
 resource devCenterCatalogs 'Microsoft.DevCenter/devcenters/catalogs@2024-10-01-preview' = [
   for catalog in settings.devCenterCatalogs: {
@@ -125,6 +157,14 @@ resource devCenterCatalogs 'Microsoft.DevCenter/devcenters/catalogs@2024-10-01-p
   }
 ]
 
+@description('Dev Center Catalogs')
+output devCenterCatalogs array = [
+  for catalog in settings.devCenterCatalogs: {
+    id: devCenterCatalogs[catalog.name].id
+    name: catalog.name
+  }
+]
+
 @description('Dev Center Environments')
 resource devCenterEnvironments 'Microsoft.DevCenter/devcenters/environmentTypes@2024-10-01-preview' = [
   for environment in settings.environmentTypes: {
@@ -134,6 +174,14 @@ resource devCenterEnvironments 'Microsoft.DevCenter/devcenters/environmentTypes@
     properties: {
       displayName: environment.name
     }
+  }
+]
+
+@description('Dev Center Environments')
+output devCenterEnvironments array = [
+  for environment in settings.environmentTypes: {
+    id: devCenterEnvironments[environment.name].id
+    name: environment.name
   }
 ]
 
@@ -155,5 +203,13 @@ module projects 'projects/projectModule.bicep' = [
      vNetAttachment
      devBoxDefinitions
     ]
+  }
+]
+
+@description('Dev Center Projects')
+output projects array = [
+  for (project,i) in settings.projects: {
+    id: projects[i].outputs.id
+    name: project.name
   }
 ]

@@ -33,6 +33,20 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-05-01' = {
   }
 }
 
+@description('Virtual Network Id')
+output virtualNetworkId string = virtualNetwork.id
+
+@description('Virtual Network Subnets')
+output virtualNetworkSubnets array = [
+  for (subnet,i) in networkSettings.subnets: {
+    id: virtualNetwork.properties.subnets[i].id
+    name: subnet.name
+  }
+]
+
+@description('Virtual Network Name')
+output virtualNetworkName string = virtualNetwork.name
+
 @description('Network Connections for the Virtual Network Subnets')
 resource networkConnection 'Microsoft.DevCenter/networkConnections@2024-10-01-preview' = [
   for (subnet, i) in networkSettings.subnets: {

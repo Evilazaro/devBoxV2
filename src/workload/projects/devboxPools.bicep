@@ -30,3 +30,10 @@ resource devBoxPools 'Microsoft.DevCenter/projects/pools@2024-10-01-preview' = [
     }
   }
 ]
+
+output devBoxPools array = [
+  for (pool,i) in pools: {
+    id: devBoxPools[i].id
+    name: pool.name
+  }
+]
