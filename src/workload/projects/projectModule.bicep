@@ -40,6 +40,12 @@ resource project 'Microsoft.DevCenter/projects@2024-10-01-preview' = {
   }
 }
 
+@description('Project ID')
+output id string = project.id
+
+@description('Project Name')
+output name string = project.name
+
 @description('Dev Center Projects Role Assignments')
 module projectRoleAssignments '../../identity/roleAssignmentsResource.bicep' = {
   name: '${project.name}-roleAssignments'
@@ -87,3 +93,4 @@ module projectDevBoxPools 'devboxPools.bicep' = {
     pools: devBoxPools
   }
 }
+
