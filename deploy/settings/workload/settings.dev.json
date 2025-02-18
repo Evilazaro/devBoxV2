@@ -76,7 +76,7 @@
             "name": "customTasks",
             "uri": "https://github.com/Evilazaro/DevExp-DevBox.git",
             "branch": "main",
-            "path": "deploy/settings/workload/tasks"
+            "path": ".configuration/devcenter/tasks"
         }
     ],
     "projects": [
@@ -102,7 +102,7 @@
                     "name": "environments",
                     "uri": "https://github.com/Evilazaro/DevExp-DevBox.git",
                     "branch": "main",
-                    "path": "deploy/settings/workload/tasks"
+                    "path": ".configuration"
                 },
                 {
                     "gitHub": true,
@@ -140,15 +140,7 @@
                         }
                     ]
                 }
-            ],
-            "tags": {
-                "environment": "dev",
-                "division": "Platforms",
-                "team": "DevExp",
-                "project": "DevExp-DevBox",
-                "costCenter": "IT",
-                "owner": "Evilazaro"
-            }
+            ]
         },
         {
             "name": "identityProvider",
@@ -172,7 +164,7 @@
                     "name": "environments",
                     "uri": "https://github.com/Evilazaro/DevExp-DevBox.git",
                     "branch": "main",
-                    "path": "deploy/settings/workload/tasks"
+                    "path": "./configuration/devcenter/tasks"
                 }
             ],
             "environments": [
@@ -210,15 +202,7 @@
                         "owner": "Evilazaro"
                     }
                 }
-            ],
-            "tags": {
-                "environment": "dev",
-                "division": "Platforms",
-                "team": "DevExp",
-                "project": "DevExp-DevBox",
-                "costCenter": "IT",
-                "owner": "Evilazaro"
-            }
+            ]
         }
     ],
     "environmentTypes": [

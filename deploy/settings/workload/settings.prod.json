@@ -36,7 +36,7 @@
             "owner": "Evilazaro"
         }
     },
-    "prodBoxDefinitions": [
+    "devBoxDefinitions": [
         {
             "name": "backEndEngineer",
             "image": "microsoftvisualstudio_visualstudioplustools_vs-2022-ent-general-win11-m365-gen2",
@@ -70,7 +70,7 @@
             }
         }
     ],
-    "prodCenterCatalogs": [
+    "devCenterCatalogs": [
         {
             "gitHub": true,
             "name": "customTasks",
@@ -114,7 +114,7 @@
             ],
             "environments": [
                 {
-                    "name": "prod",
+                    "name": "dev",
                     "roles": [
                         {
                             "id": "b24988ac-6180-42a0-ab88-20f7382dd24c",
@@ -140,15 +140,7 @@
                         }
                     ]
                 }
-            ],
-            "tags": {
-                "environment": "prod",
-                "division": "Platforms",
-                "team": "DevExp",
-                "project": "DevExp-DevBox",
-                "costCenter": "IT",
-                "owner": "Evilazaro"
-            }
+            ]
         },
         {
             "name": "identityProvider",
@@ -185,7 +177,7 @@
                         }
                     ],
                     "tags": {
-                        "environment": "dev",
+                        "environment": "prod",
                         "division": "Platforms",
                         "team": "DevExp",
                         "project": "DevExp-DevBox",
@@ -210,22 +202,14 @@
                         "owner": "Evilazaro"
                     }
                 }
-            ],
-            "tags": {
-                "environment": "prod",
-                "division": "Platforms",
-                "team": "DevExp",
-                "project": "DevExp-DevBox",
-                "costCenter": "IT",
-                "owner": "Evilazaro"
-            }
+            ]
         }
     ],
     "environmentTypes": [
         {
             "name": "dev",
             "tags": {
-                "environment": "dev",
+                "environment": "prod",
                 "division": "Platforms",
                 "team": "DevExp",
                 "project": "DevExp-DevBox",
