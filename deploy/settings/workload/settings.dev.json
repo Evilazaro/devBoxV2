@@ -88,6 +88,32 @@
                     "branch": "main",
                     "path": "deploy/settings/workload/tasks"
                 }
+            ],
+            "environments": [
+                {
+                    "name": "dev",
+                    "roles": [
+                        {
+                            "id": "8e3af657-a8ff-443c-a75c-2fe8c4bcb635",
+                            "properties": {}
+                        }
+                    ]
+                },
+                {
+                    "name": "prod",
+                    "roles": [
+                        {
+                            "id": "8e3af657-a8ff-443c-a75c-2fe8c4bcb635",
+                            "properties": {}
+                        }
+                    ]
+                },
+                {
+                    "name": "staging",
+                    "tags": {
+                        "environment": "test"
+                    }
+                }
             ]
         },
         {
@@ -113,6 +139,20 @@
                     "uri": "https://github.com/Evilazaro/DevExp-DevBox.git",
                     "branch": "main",
                     "path": "deploy/settings/workload/tasks"
+                }
+            ],
+            "environments": [
+                {
+                    "name": "dev",
+                    "roles": [
+                        {
+                            "id": "8e3af657-a8ff-443c-a75c-2fe8c4bcb635",
+                            "properties": {}
+                        }
+                    ]
+                },
+                {
+                    "name": "prod"
                 }
             ]
         }

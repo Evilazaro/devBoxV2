@@ -10,6 +10,9 @@ param catalogs array
 @description('Project Roles')
 param roles array
 
+@description('Environments')
+param environments array
+
 resource project 'Microsoft.DevCenter/projects@2024-10-01-preview' = {
   name: name
   location: resourceGroup().location
@@ -48,3 +51,19 @@ module projectCatalogs 'catalogs.bicep' = {
     catalogs: catalogs
   }
 }
+
+@description('Project Environments')
+resource projectEnvironments 'Microsoft.DevCenter/projects/environmentTypes@2024-10-01-preview' = [
+  for environment in environments: {
+    name: environment.name
+    parent: project
+    properties: {
+      displayName: environment.name
+      deploymentTargetId: subscription().id
+      status: 'Enabled'
+      creatorRoleAssignment: {
+        roles: environment.roles
+      }
+    }
+  }
+]

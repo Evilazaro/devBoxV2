@@ -146,6 +146,7 @@ module projects 'projects/projectModule.bicep' = [
       catalogs: project.catalogs
       devCenterId: devCenter.id
       roles: project.identity.roles
+      environments: project.environments
     }
   }
 ]
