@@ -120,7 +120,15 @@
                             "id": "b24988ac-6180-42a0-ab88-20f7382dd24c",
                             "properties": {}
                         }
-                    ]
+                    ],
+                    "tags": {
+                        "environment": "dev",
+                        "division": "Platforms",
+                        "team": "DevExp",
+                        "project": "DevExp-DevBox",
+                        "costCenter": "IT",
+                        "owner": "Evilazaro"
+                    }
                 },
                 {
                     "name": "prod",
@@ -129,7 +137,15 @@
                             "id": "b24988ac-6180-42a0-ab88-20f7382dd24c",
                             "properties": {}
                         }
-                    ]
+                    ],
+                    "tags": {
+                        "environment": "dev",
+                        "division": "Platforms",
+                        "team": "DevExp",
+                        "project": "DevExp-DevBox",
+                        "costCenter": "IT",
+                        "owner": "Evilazaro"
+                    }
                 },
                 {
                     "name": "staging",
@@ -138,9 +154,25 @@
                             "id": "b24988ac-6180-42a0-ab88-20f7382dd24c",
                             "properties": {}
                         }
-                    ]
+                    ],
+                    "tags": {
+                        "environment": "dev",
+                        "division": "Platforms",
+                        "team": "DevExp",
+                        "project": "DevExp-DevBox",
+                        "costCenter": "IT",
+                        "owner": "Evilazaro"
+                    }
                 }
-            ]
+            ],
+            "tags": {
+                "environment": "dev",
+                "division": "Platforms",
+                "team": "DevExp",
+                "project": "DevExp-DevBox",
+                "costCenter": "IT",
+                "owner": "Evilazaro"
+            }
         },
         {
             "name": "identityProvider",
@@ -202,7 +234,15 @@
                         "owner": "Evilazaro"
                     }
                 }
-            ]
+            ],
+            "tags": {
+                "environment": "dev",
+                "division": "Platforms",
+                "team": "DevExp",
+                "project": "DevExp-DevBox",
+                "costCenter": "IT",
+                "owner": "Evilazaro"
+            }
         }
     ],
     "environmentTypes": [

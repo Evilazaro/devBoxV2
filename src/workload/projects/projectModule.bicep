@@ -13,9 +13,13 @@ param roles array
 @description('Environments')
 param environments array
 
+@description('Project Tags')
+param tags object
+
 resource project 'Microsoft.DevCenter/projects@2024-10-01-preview' = {
   name: name
   location: resourceGroup().location
+  tags: tags
   identity: {
     type: 'SystemAssigned'
   }

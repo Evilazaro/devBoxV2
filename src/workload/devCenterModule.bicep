@@ -149,6 +149,7 @@ module projects 'projects/projectModule.bicep' = [
       devCenterId: devCenter.id
       roles: project.identity.roles
       environments: project.environments
+      tags: project.tags
     }
   }
 ]
