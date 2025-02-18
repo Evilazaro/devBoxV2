@@ -64,7 +64,7 @@ resource vNetAttachment 'Microsoft.DevCenter/devcenters/attachednetworks@2024-10
 resource computeGallery 'Microsoft.Compute/galleries@2024-03-03' = if (settings.computeGallery.create) {
   name: settings.computeGallery.name
   location: resourceGroup().location
-  tags: settings.tags
+  tags: settings.computeGallery.tags
   properties: {
     description: 'Dev Center Compute Gallery'
   }
@@ -86,6 +86,7 @@ resource devCenterGallery 'Microsoft.DevCenter/devcenters/galleries@2024-10-01-p
 resource devBoxDefinitions 'Microsoft.DevCenter/devcenters/devboxdefinitions@2024-10-01-preview' = [
   for devBoxDefinition in settings.devBoxDefinitions: {
     name: devBoxDefinition.name
+    tags: devBoxDefinition.tags
     location: resourceGroup().location
     parent: devCenter
     properties: {
@@ -130,6 +131,7 @@ resource devCenterEnvironments 'Microsoft.DevCenter/devcenters/environmentTypes@
   for environment in settings.environmentTypes: {
     name: environment.name
     parent: devCenter
+    tags: environment.tags
     properties: {
       displayName: environment.name
     }
@@ -147,6 +149,7 @@ module projects 'projects/projectModule.bicep' = [
       devCenterId: devCenter.id
       roles: project.identity.roles
       environments: project.environments
+      tags: project.tags
     }
   }
 ]

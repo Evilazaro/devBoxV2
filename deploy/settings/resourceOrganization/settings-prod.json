@@ -3,7 +3,7 @@
         "name": "Connectivity",
         "description": "connectivity",
         "tags": {
-        "environment": "dev",
+        "environment": "prod",
         "division": "Platforms",
         "team": "DevExp",
         "project": "DevExp-DevBox",
@@ -16,7 +16,7 @@
         "name": "Identity",
         "description": "identity",
         "tags": {
-        "environment": "dev",
+        "environment": "prod",
         "division": "Platforms",
         "team": "DevExp",
         "project": "DevExp-DevBox",
@@ -29,7 +29,7 @@
         "name": "Management",
         "description": "management",
         "tags": {
-        "environment": "dev",
+        "environment": "prod",
         "division": "Platforms",
         "team": "DevExp",
         "project": "DevExp-DevBox",
@@ -42,7 +42,7 @@
         "name": "Workload",
         "description": "prodExp",
         "tags": {
-        "environment": "dev",
+        "environment": "prod",
         "division": "Platforms",
         "team": "DevExp",
         "project": "DevExp-DevBox",

@@ -3,7 +3,12 @@
     "microsoftHostedNetworkEnableStatus": "Enabled",
     "installAzureMonitorAgentEnableStatus": "Enabled",
     "tags": {
-        "environment": "dev"
+        "environment": "dev",
+        "division": "Platforms",
+        "team": "DevExp",
+        "project": "DevExp-DevBox",
+        "costCenter": "IT",
+        "owner": "Evilazaro"
     },
     "identity": {
         "type": "SystemAssigned",
@@ -21,7 +26,15 @@
     },
     "computeGallery": {
         "name": "contosoComputeGallery",
-        "create": true
+        "create": true,
+        "tags": {
+            "environment": "dev",
+            "division": "Platforms",
+            "team": "DevExp",
+            "project": "DevExp-DevBox",
+            "costCenter": "IT",
+            "owner": "Evilazaro"
+        }
     },
     "devBoxDefinitions": [
         {
@@ -32,7 +45,12 @@
             "hibernateSupport": "Disabled",
             "default": true,
             "tags": {
-                "environment": "dev"
+                "environment": "dev",
+                "division": "Platforms",
+                "team": "DevExp",
+                "project": "DevExp-DevBox",
+                "costCenter": "IT",
+                "owner": "Evilazaro"
             }
         },
         {
@@ -43,7 +61,12 @@
             "hibernateSupport": "Enabled",
             "default": true,
             "tags": {
-                "environment": "dev"
+                "environment": "dev",
+                "division": "Platforms",
+                "team": "DevExp",
+                "project": "DevExp-DevBox",
+                "costCenter": "IT",
+                "owner": "Evilazaro"
             }
         }
     ],
@@ -117,7 +140,15 @@
                         }
                     ]
                 }
-            ]
+            ],
+            "tags": {
+                "environment": "dev",
+                "division": "Platforms",
+                "team": "DevExp",
+                "project": "DevExp-DevBox",
+                "costCenter": "IT",
+                "owner": "Evilazaro"
+            }
         },
         {
             "name": "identityProvider",
@@ -152,7 +183,15 @@
                             "id": "b24988ac-6180-42a0-ab88-20f7382dd24c",
                             "properties": {}
                         }
-                    ]
+                    ],
+                    "tags": {
+                        "environment": "dev",
+                        "division": "Platforms",
+                        "team": "DevExp",
+                        "project": "DevExp-DevBox",
+                        "costCenter": "IT",
+                        "owner": "Evilazaro"
+                    }
                 },
                 {
                     "name": "prod",
@@ -161,28 +200,59 @@
                             "id": "b24988ac-6180-42a0-ab88-20f7382dd24c",
                             "properties": {}
                         }
-                    ]
+                    ],
+                    "tags": {
+                        "environment": "dev",
+                        "division": "Platforms",
+                        "team": "DevExp",
+                        "project": "DevExp-DevBox",
+                        "costCenter": "IT",
+                        "owner": "Evilazaro"
+                    }
                 }
-            ]
+            ],
+            "tags": {
+                "environment": "dev",
+                "division": "Platforms",
+                "team": "DevExp",
+                "project": "DevExp-DevBox",
+                "costCenter": "IT",
+                "owner": "Evilazaro"
+            }
         }
     ],
     "environmentTypes": [
         {
             "name": "dev",
             "tags": {
-                "environment": "dev"
+                "environment": "dev",
+                "division": "Platforms",
+                "team": "DevExp",
+                "project": "DevExp-DevBox",
+                "costCenter": "IT",
+                "owner": "Evilazaro"
             }
         },
         {
             "name": "prod",
             "tags": {
-                "environment": "prod"
+                "environment": "dev",
+                "division": "Platforms",
+                "team": "DevExp",
+                "project": "DevExp-DevBox",
+                "costCenter": "IT",
+                "owner": "Evilazaro"
             }
         },
         {
             "name": "staging",
             "tags": {
-                "environment": "test"
+                "environment": "dev",
+                "division": "Platforms",
+                "team": "DevExp",
+                "project": "DevExp-DevBox",
+                "costCenter": "IT",
+                "owner": "Evilazaro"
             }
         }
     ]
