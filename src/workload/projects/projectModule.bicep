@@ -47,7 +47,7 @@ output id string = project.id
 output name string = project.name
 
 @description('Dev Center Projects Role Assignments')
-module projectRoleAssignments '../../identity/roleAssignmentsResource.bicep' = {
+module projectRoleAssignments '../../identity/projectRoleAssignments.bicep' = {
   name: '${project.name}-roleAssignments'
   scope: resourceGroup()
   params: {

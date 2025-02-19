@@ -12,7 +12,7 @@ param principalId string
 resource roleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = [
   for role in roles: {
     name: guid(role, scope, principalId)
-    scope: scope == 'subscription' ? subscription() : resourceGroup()
+    scope: resourceGroup()
     properties: {
       principalId: principalId
       roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', role)
@@ -23,7 +23,7 @@ resource roleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = [
 
 @description('Role Assignments')
 output roleAssignments array = [
-  for (role,i) in roles: {
+  for (role, i) in roles: {
     id: roleAssignment[i].id
     name: role
   }

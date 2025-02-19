@@ -45,9 +45,9 @@ output devCenterId string = devCenter.id
 @description('Dev Center Name')
 output devCenterName string = devCenter.name
 
-module roleAssignments '../identity/roleAssignmentsResource.bicep' = {
+module roleAssignments '../identity/devCenterRoleAssignments.bicep' = {
   name: 'roleAssignments'
-  scope: resourceGroup()
+  scope: subscription()
   params: {
     scope: 'subscription'
     principalId: devCenter.identity.principalId
