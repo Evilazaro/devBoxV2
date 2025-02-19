@@ -20,61 +20,40 @@ var landingZone = environment == 'dev'
   : loadJsonContent('settings/resourceOrganization/settings-prod.json')
 
 @description('Connectivity Resource Group')
-resource connectivityResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' = {
-  name: '${workloadName}-${landingZone.connectivity.name}-${environment}'
-  location: location
-  tags: landingZone.connectivity.tags
+module resourceGroups '../src/resourceOrganization/resourceGroups.bicep'= {
+  name: 'resourceOrganization'
+  scope: subscription()
+  params: {
+    location: location
+    environment: environment
+    landingZone: landingZone
+    workloadName: workloadName
+  }
 }
-
-@description('Resource Group Name')
-output connectivityResourceGroupName string = connectivityResourceGroup.name
-
-@description('Resource Group Id')
-output connectivityResourceGroupId string = connectivityResourceGroup.id
 
 @description('Deploy Connectivity Module')
 module connectivity '../src/connectivity/connectivityModule.bicep' = {
-  scope: connectivityResourceGroup
+  scope: resourceGroup('${workloadName}-${landingZone.connectivity.name}-${environment}')
   name: 'connectivity'
   params: {
-    name: '${workloadName}-${uniqueString(workloadName,connectivityResourceGroup.id)}'
+    name: '${workloadName}-${uniqueString(workloadName,resourceGroups.outputs.connectivityResourceGroupId)}'
     environment: environment
   }
 }
 
-@description('Connectivity Outputs')
-output connectivity object = connectivity.outputs
+@description('Connectivity vNet Id')
+output connectivityVNetId string = connectivity.outputs.virtualNetworkId
 
-@description('Connectivity Resource Group')
-resource managementResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' = {
-  name: '${workloadName}-${landingZone.management.name}-${environment}'
-  location: location
-  tags: landingZone.management.tags
-}
+@description('Connectivity vNet Subnets')
+output connectivityVNetSubnets array = connectivity.outputs.virtualNetworkSubnets
 
-@description('Resource Group ID')
-output managementResourceGroupId string = managementResourceGroup.id
-
-@description('Resource Group Name')
-output managementResourceGroupName string = managementResourceGroup.name
-
-@description('Connectivity Resource Group')
-resource workloadResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' = {
-  name: '${workloadName}-${landingZone.workload.name}-${environment}'
-  location: location
-  tags: landingZone.workload.tags
-}
-
-@description('Resource Group ID')
-output workloadResourceGroupId string = workloadResourceGroup.id
-
-@description('Resource Group Name')
-output workloadResourceGroupName string = workloadResourceGroup.name
+@description('Connectivity vNet Name')
+output connectivityVNetName string = connectivity.outputs.virtualNetworkName
 
 @description('Deploy Workload Module')
 module workload '../src/workload/devCenterModule.bicep' = {
-  scope: workloadResourceGroup
-  name: 'devCenter'
+  scope: resourceGroup('${workloadName}-${landingZone.workload.name}-${environment}')
+  name: 'workload'
   params: {
     name: '${workloadName}-devCenter'
     networkConnections: connectivity.outputs.networkConnections
