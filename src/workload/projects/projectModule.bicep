@@ -49,9 +49,9 @@ output name string = project.name
 @description('Dev Center Projects Role Assignments')
 module projectRoleAssignments '../../identity/roleAssignmentsResource.bicep' = {
   name: '${project.name}-roleAssignments'
-  scope: subscription()
+  scope: resourceGroup()
   params: {
-    scope: 'subscription'
+    scope: 'resourceGroup'
     principalId: project.identity.principalId
     roles: roles
   }
