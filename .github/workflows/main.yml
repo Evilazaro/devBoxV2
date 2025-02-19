@@ -89,5 +89,4 @@ jobs:
             --parameters ./deploy/params.bicepparam \
             --parameters workloadName=${{ inputs.workloadName }} \
                          location=${{ inputs.location }} \
-                         environment=${{ inputs.environment }} \
-            --mode Incremental
+                         environment=${{ inputs.environment }}
