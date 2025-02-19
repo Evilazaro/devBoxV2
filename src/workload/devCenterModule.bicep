@@ -59,7 +59,7 @@ module roleAssignments '../identity/roleAssignmentsResource.bicep' = {
 output roleAssignments array = roleAssignments.outputs.roleAssignments
 
 @description('Deploys Network Connections for the Dev Center')
-module vNetAttachment 'configuration/networkConnections.bicep'= {
+module vNetAttachment 'devBoxConfiguration/networkConnections.bicep'= {
   name: 'vNetAttachments'
   scope: resourceGroup()
   params: {
@@ -100,7 +100,7 @@ resource devCenterGallery 'Microsoft.DevCenter/devcenters/galleries@2024-10-01-p
 }
 
 @description('Dev Center DevBox Definitions')
-module devBoxDefinitions 'configuration/devboxDefinitions.bicep' = {
+module devBoxDefinitions 'devBoxConfiguration/devboxDefinitions.bicep' = {
   name: 'devBoxDefinitions'
   scope: resourceGroup()
   params: {
@@ -108,62 +108,35 @@ module devBoxDefinitions 'configuration/devboxDefinitions.bicep' = {
     definitions: settings.devBoxDefinitions
   }
 }
+
 @description('Dev Center DevBox Definitions')
 output devBoxDefinitions array = devBoxDefinitions.outputs.devBoxDefinitions
 
+@description('Dev Center Catalogs')
+module devCenterCatalogs 'environmentConfiguration/catalogs.bicep'= {
+  name: 'devCenterCatalogs'
+  scope: resourceGroup()
+  params: {
+    devCenterCatalogs: settings.devCenterCatalogs
+    devCenterName: devCenter.name
+  }
+}
 
 @description('Dev Center Catalogs')
-resource devCenterCatalogs 'Microsoft.DevCenter/devcenters/catalogs@2024-10-01-preview' = [
-  for catalog in settings.devCenterCatalogs: {
-    name: catalog.name
-    parent: devCenter
-    properties: (catalog.gitHub)
-      ? {
-          gitHub: {
-            uri: catalog.uri
-            branch: catalog.branch
-            path: catalog.path
-          }
-          syncType: 'Scheduled'
-        }
-      : {
-          adoGit: {
-            uri: catalog.uri
-            branch: catalog.branch
-            path: catalog.path
-          }
-          syncType: 'Scheduled'
-        }
-  }
-]
-
-@description('Dev Center Catalogs')
-output devCenterCatalogs array = [
-  for catalog in settings.devCenterCatalogs: {
-    id: devCenterCatalogs[catalog.name].id
-    name: catalog.name
-  }
-]
+output devCenterCatalogs array = devCenterCatalogs.outputs.devCenterCatalogs
 
 @description('Dev Center Environments')
-resource devCenterEnvironments 'Microsoft.DevCenter/devcenters/environmentTypes@2024-10-01-preview' = [
-  for environment in settings.environmentTypes: {
-    name: environment.name
-    parent: devCenter
-    tags: environment.tags
-    properties: {
-      displayName: environment.name
-    }
+module devCenterEnvironments 'environmentConfiguration/environmentTypes.bicep'= {
+  name: 'devCenterEnvironmentTypes'
+  scope: resourceGroup()
+  params: {
+    devCenterName: devCenter.name
+    environmentTypes: settings.environmentTypes
   }
-]
+}
 
 @description('Dev Center Environments')
-output devCenterEnvironments array = [
-  for environment in settings.environmentTypes: {
-    id: devCenterEnvironments[environment.name].id
-    name: environment.name
-  }
-]
+output devCenterEnvironments array = devCenterEnvironments.outputs.devCenterEnvironments
 
 @description('Dev Center Projects')
 module projects 'projects/projectModule.bicep' = [

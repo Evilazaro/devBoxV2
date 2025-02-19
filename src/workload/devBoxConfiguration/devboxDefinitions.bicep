@@ -31,8 +31,8 @@ resource devBoxDefinitions 'Microsoft.DevCenter/devcenters/devboxdefinitions@202
 
 @description('Dev Center DevBox Definitions')
 output devBoxDefinitions array = [
-  for devBoxDefinition in definitions: {
-    id: devBoxDefinitions[devBoxDefinition.name].id
+  for (devBoxDefinition,i) in definitions: {
+    id: devBoxDefinitions[i].id
     name: devBoxDefinition.name
   }
 ]
