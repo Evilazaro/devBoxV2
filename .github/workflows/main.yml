@@ -84,6 +84,7 @@ jobs:
         id: deploy-dev-center
         run: |
           az deployment sub create  \
+            --name 'deploy-DevBox' \
             --location ${{ inputs.location }} \
             --template-file ./deploy/deploy.bicep \
             --parameters ./deploy/params.bicepparam \
