@@ -53,7 +53,7 @@ output connectivityVNetName string = connectivity.outputs.virtualNetworkName
 @description('Deploy Workload Module')
 module workload '../src/workload/devCenterModule.bicep' = {
   scope: resourceGroup('${workloadName}-${landingZone.workload.name}-${environment}')
-  name: 'devCenter'
+  name: 'workload'
   params: {
     name: '${workloadName}-devCenter'
     networkConnections: connectivity.outputs.networkConnections
