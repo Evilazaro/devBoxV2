@@ -6,14 +6,9 @@ $WarningPreference = "Stop"
 
 # Azure Resource Group Names Constants
 $solutionName = "Contoso"
-$devBoxResourceGroupName = "$solutionName-DevExp-RG"
-$networkResourceGroupName = "$solutionName-DevExp-Connectivity-RG"
-
-# Identity Parameters Constants
-$customRoleName = "ContosoDevCenterDevBoxRole"
-
-# Get the current subscription ID
-$subscriptionId = (az account show --query id --output tsv)
+$workloadResourceGroup = "$solutionName-Workload-dev"
+$connectivityResourceGroup = "$solutionName-Connectivity-dev"
+$managemwentResourceGroup = "$solutionName-Management-dev"
 
 # Function to delete a resource group
 function Remove-ResourceGroup {
@@ -52,8 +47,9 @@ function Remove-ResourceGroup {
 function Remove-Resources {
     try {
         Clear-Host
-        Remove-ResourceGroup -resourceGroupName $devBoxResourceGroupName
-        Remove-ResourceGroup -resourceGroupName $networkResourceGroupName
+        Remove-ResourceGroup -resourceGroupName $workloadResourceGroup
+        Remove-ResourceGroup -resourceGroupName $connectivityResourceGroup
+        Remove-ResourceGroup -resourceGroupName $managemwentResourceGroup
         Remove-ResourceGroup -resourceGroupName "NetworkWatcherRG"
         Remove-ResourceGroup -resourceGroupName "Default-ActivityLogAlerts"
         Remove-ResourceGroup -resourceGroupName "DefaultResourceGroup-WUS2"
