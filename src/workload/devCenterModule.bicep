@@ -59,23 +59,20 @@ module roleAssignments '../identity/roleAssignmentsResource.bicep' = {
 output roleAssignments object = roleAssignments.outputs
 
 @description('Deploys Network Connections for the Dev Center')
-resource vNetAttachment 'Microsoft.DevCenter/devcenters/attachednetworks@2024-10-01-preview' = [
-  for connection in networkConnections: {
-    name: connection.name
-    parent: devCenter
-    properties: {
-      networkConnectionId: connection.id
-    }
+module vNetAttachment 'configuration/networkConnections.bicep'= {
+  name: 'vNetAttachments'
+  scope: resourceGroup()
+  params: {
+    devCenterName: devCenter.name
+    networkConnections: networkConnections
   }
-]
+}
 
 @description('Network Connections')
-output vNetAttachmentId array = [
-  for connection in networkConnections: {
-    id: vNetAttachment[connection.name].id
-    name: connection.name
-  }
-]
+output vNetAttachments array = [for connection in networkConnections: {
+  id: vNetAttachment.outputs.vNetAttachments[connection.name].id
+  name: connection.name
+}]
 
 @description('Compute Gallery')
 resource computeGallery 'Microsoft.Compute/galleries@2024-03-03' = if (settings.computeGallery.create) {
@@ -106,31 +103,20 @@ resource devCenterGallery 'Microsoft.DevCenter/devcenters/galleries@2024-10-01-p
 }
 
 @description('Dev Center DevBox Definitions')
-resource devBoxDefinitions 'Microsoft.DevCenter/devcenters/devboxdefinitions@2024-10-01-preview' = [
-  for devBoxDefinition in settings.devBoxDefinitions: {
-    name: devBoxDefinition.name
-    tags: devBoxDefinition.tags
-    location: resourceGroup().location
-    parent: devCenter
-    properties: {
-      hibernateSupport: devBoxDefinition.hibernateSupport
-      imageReference: {
-        id: '${resourceId('Microsoft.DevCenter/devcenters/galleries/',devCenter.name,'Default')}/images/${devBoxDefinition.image}'
-      }
-      sku: {
-        name: devBoxDefinition.sku
-      }
-    }
+module devBoxDefinitions 'configuration/devboxDefinitions.bicep' = {
+  name: 'devBoxDefinitions'
+  scope: resourceGroup()
+  params: {
+    devCenterName: devCenter.name
+    definitions: settings.devBoxDefinitions
   }
-]
-
+}
 @description('Dev Center DevBox Definitions')
-output devBoxDefinitions array = [
-  for devBoxDefinition in settings.devBoxDefinitions: {
-    id: devBoxDefinitions[devBoxDefinition.name].id
-    name: devBoxDefinition.name
-  }
-]
+output devBoxDefinitions array = [for definition in settings.devBoxDefinitions: {
+  id: devBoxDefinitions.outputs.devBoxDefinitions[definition.name].id
+  name: definition.name
+}]
+
 
 @description('Dev Center Catalogs')
 resource devCenterCatalogs 'Microsoft.DevCenter/devcenters/catalogs@2024-10-01-preview' = [
