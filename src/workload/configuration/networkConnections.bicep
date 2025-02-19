@@ -23,8 +23,8 @@ resource vNetAttachment 'Microsoft.DevCenter/devcenters/attachednetworks@2024-10
 
 @description('Network Connections')
 output vNetAttachments array = [
-  for connection in networkConnections: {
-    id: vNetAttachment[connection.name].id
+  for (connection,i) in networkConnections: {
+    id: vNetAttachment[i].id
     name: connection.name
   }
 ]

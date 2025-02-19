@@ -56,7 +56,7 @@ module roleAssignments '../identity/roleAssignmentsResource.bicep' = {
 }
 
 @description('Dev Center Role Assignments')
-output roleAssignments object = roleAssignments.outputs
+output roleAssignments array = roleAssignments.outputs.roleAssignments
 
 @description('Deploys Network Connections for the Dev Center')
 module vNetAttachment 'configuration/networkConnections.bicep'= {
@@ -69,10 +69,7 @@ module vNetAttachment 'configuration/networkConnections.bicep'= {
 }
 
 @description('Network Connections')
-output vNetAttachments array = [for connection in networkConnections: {
-  id: vNetAttachment.outputs.vNetAttachments[connection.name].id
-  name: connection.name
-}]
+output vNetAttachments array = vNetAttachment.outputs.vNetAttachments
 
 @description('Compute Gallery')
 resource computeGallery 'Microsoft.Compute/galleries@2024-03-03' = if (settings.computeGallery.create) {
@@ -112,10 +109,7 @@ module devBoxDefinitions 'configuration/devboxDefinitions.bicep' = {
   }
 }
 @description('Dev Center DevBox Definitions')
-output devBoxDefinitions array = [for definition in settings.devBoxDefinitions: {
-  id: devBoxDefinitions.outputs.devBoxDefinitions[definition.name].id
-  name: definition.name
-}]
+output devBoxDefinitions array = devBoxDefinitions.outputs.devBoxDefinitions
 
 
 @description('Dev Center Catalogs')
