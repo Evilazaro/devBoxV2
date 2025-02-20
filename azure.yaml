@@ -8,4 +8,5 @@ metadata:
 infra:
   provider: bicep
   path: ./infra/main.bicep
-
+pipeline:
+  provider: github
