@@ -10,3 +10,24 @@ infra:
   path: ./infra/main.bicep
 pipeline:
   provider: github
+workflows:
+  up: 
+    steps:
+      - name: Create a new Azure Dev CLI environment
+        run: az dev env create -n ${{ inputs.name }} -l ${{ inputs.location }}
+        inputs:
+          name:
+            description: The name of the environment
+            type: string
+            default: dev
+          location:
+            description: The location of the environment
+            type: string
+            default: eastus2
+      - name: up
+        run: azd up -e -n ${{ inputs.name }}
+        inputs:
+          name:
+            description: The name of the environment
+            type: string
+            default: dev
