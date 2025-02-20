@@ -72,3 +72,9 @@ module workload '../src/workload/devCenterModule.bicep' = {
   }
 }
 
+@description('Workload Dev Center Id')
+output workloadDevCenterId string = workload.outputs.devCenterId
+
+@description('Workload Dev Center Name')
+output workloadDevCenterName string = workload.outputs.devCenterName
+
