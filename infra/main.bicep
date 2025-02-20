@@ -36,11 +36,8 @@ module monitoring '../src/management/monitoringModule.bicep'= {
   scope: resourceGroup('${workloadName}-${landingZone.management.name}-${environment}')
   name: 'monitoring'
   params: {
-    workloadName: workloadName
+    workloadName: workloadName	
   }
-  dependsOn: [
-    resourceGroups
-  ]
 }
 
 @description('Deploy Connectivity Module')
