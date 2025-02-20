@@ -43,8 +43,8 @@ jobs:
       # Build the Bicep files for Dev Box Resources
       - name: Build Dev Box Bicep files
         run: |
-          az bicep build --file ./deploy/deploy.bicep --outfile ./bicepArtifacts/deploy.json
-          az bicep build-params --file ./deploy/params.bicepparam --outfile ./bicepArtifacts/deploy-params.json
+          az bicep build --file ./.azure/deploy.bicep --outfile ./bicepArtifacts/deploy.json
+          az bicep build-params --file ./.azure/params.bicepparam --outfile ./bicepArtifacts/deploy-params.json
 
       # Compress the built Bicep artifacts into a zip file
       - name: Compress Bicep Artifacts
@@ -86,8 +86,8 @@ jobs:
           az deployment sub create  \
             --name 'deploy-DevBox' \
             --location ${{ inputs.location }} \
-            --template-file ./deploy/deploy.bicep \
-            --parameters ./deploy/params.bicepparam \
+            --template-file ./.azure/deploy.bicep \
+            --parameters ./.azure/params.bicepparam \
             --parameters workloadName=${{ inputs.workloadName }} \
                          location=${{ inputs.location }} \
                          environment=${{ inputs.environment }}
