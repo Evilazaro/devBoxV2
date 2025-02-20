@@ -58,20 +58,12 @@ resource logAnalyticsDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2
       {
         categoryGroup: 'allLogs'
         enabled: true
-        retentionPolicy: {
-          days: 90
-          enabled: true
-        }
       }
     ]
     metrics: [
       {
         category: 'AllMetrics'
         enabled: true
-        retentionPolicy: {
-          days: 90
-          enabled: true
-        }
       }
     ]
     workspaceId: workspaceId
