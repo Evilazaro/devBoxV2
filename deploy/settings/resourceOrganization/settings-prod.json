@@ -1,0 +1,54 @@
+{
+    "connectivity": {
+        "name": "Connectivity",
+        "description": "connectivity",
+        "tags": {
+        "environment": "prod",
+        "division": "Platforms",
+        "team": "DevExp",
+        "project": "DevExp-DevBox",
+        "costCenter": "IT",
+        "owner": "Evilazaro",
+        "landingZone": "Connectivity"
+    }
+    },
+    "identity": {
+        "name": "Identity",
+        "description": "identity",
+        "tags": {
+        "environment": "prod",
+        "division": "Platforms",
+        "team": "DevExp",
+        "project": "DevExp-DevBox",
+        "costCenter": "IT",
+        "owner": "Evilazaro",
+        "landingZone": "Identity"
+    }
+    },
+    "management": {
+        "name": "Management",
+        "description": "management",
+        "tags": {
+        "environment": "prod",
+        "division": "Platforms",
+        "team": "DevExp",
+        "project": "DevExp-DevBox",
+        "costCenter": "IT",
+        "owner": "Evilazaro",
+        "landingZone": "Management"
+    }
+    },
+    "workload": {
+        "name": "Workload",
+        "description": "prodExp",
+        "tags": {
+        "environment": "prod",
+        "division": "Platforms",
+        "team": "DevExp",
+        "project": "DevExp-DevBox",
+        "costCenter": "IT",
+        "owner": "Evilazaro",
+        "landingZone": "Workload"
+    }
+    }
+}
