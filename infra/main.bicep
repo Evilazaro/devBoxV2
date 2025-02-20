@@ -38,6 +38,9 @@ module monitoring '../src/management/monitoringModule.bicep'= {
   params: {
     workloadName: workloadName	
   }
+  dependsOn: [
+    resourceGroups
+  ]
 }
 
 @description('Deploy Connectivity Module')
