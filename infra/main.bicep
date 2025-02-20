@@ -31,6 +31,20 @@ module resourceGroups '../src/resourceOrganization/resourceGroups.bicep'= {
   }
 }
 
+@description('Connectivity Resource Group Id')
+output connectivityResourceGroupId string = resourceGroups.outputs.connectivityResourceGroupId
+@description('Connectivity Resource Group Name')
+output connectivityResourceGroupName string = resourceGroups.outputs.connectivityResourceGroupName
+@description('Management Resource Group Id')
+output managementResourceGroupId string = resourceGroups.outputs.managementResourceGroupId
+@description('Management Resource Group Name')
+output managementResourceGroupName string = resourceGroups.outputs.managementResourceGroupName
+@description('Workload Resource Group Id')
+output workloadResourceGroupId string = resourceGroups.outputs.workloadResourceGroupId
+@description('Workload Resource Group Name')
+output workloadResourceGroupName string = resourceGroups.outputs.workloadResourceGroupName
+
+
 @description('Monitoring Resources')
 module monitoring '../src/management/monitoringModule.bicep'= {
   scope: resourceGroup('${workloadName}-${landingZone.management.name}-${environment}')
@@ -42,6 +56,11 @@ module monitoring '../src/management/monitoringModule.bicep'= {
     resourceGroups
   ]
 }
+
+@description('Monitoring Log Analytics Id')
+output monitoringLogAnalyticsId string = monitoring.outputs.logAnalyticsId
+@description('Monitoring Log Analytics Name')
+output monitoringLogAnalyticsName string = monitoring.outputs.logAnalyticsName
 
 @description('Deploy Connectivity Module')
 module connectivity '../src/connectivity/connectivityModule.bicep' = {
@@ -56,9 +75,6 @@ module connectivity '../src/connectivity/connectivityModule.bicep' = {
 
 @description('Connectivity vNet Id')
 output connectivityVNetId string = connectivity.outputs.virtualNetworkId
-
-@description('Connectivity vNet Subnets')
-output connectivityVNetSubnets array = connectivity.outputs.virtualNetworkSubnets
 
 @description('Connectivity vNet Name')
 output connectivityVNetName string = connectivity.outputs.virtualNetworkName
