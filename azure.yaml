@@ -6,16 +6,9 @@ metadata:
   description: A development box for building and testing Azure Dev CLI
   version: 0.1.0
 
-hooks:
-  preup: 
-    windows:
-      shell: pwsh
-      continueOnError: false
-      interactive: true
-      run: ./.configuration/setup/powershell/azdSetup.ps1
-
 infra:
   provider: bicep
   path: ./infra/main.bicep
+
 pipeline:
   provider: github
