@@ -5,7 +5,7 @@ module logAnalytics './logAnalytics.bicep' = {
   name: 'logAnalytics'
   scope: resourceGroup()
   params: {
-    name: workloadName
+    name: '${workloadName}-${uniqueString(resourceGroup().id)}'
   }
 }
 
