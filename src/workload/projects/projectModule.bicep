@@ -68,21 +68,14 @@ module projectCatalogs 'catalogs.bicep' = {
 }
 
 @description('Project Environments')
-resource projectEnvironments 'Microsoft.DevCenter/projects/environmentTypes@2024-10-01-preview' = [
-  for environment in environments: {
-    name: environment.name
-    parent: project
-    tags: environment.tags
-    properties: {
-      displayName: environment.name
-      deploymentTargetId: subscription().id
-      status: 'Enabled'
-      creatorRoleAssignment: {
-        roles: toObject(environment.roles, role => role.id, role => role.properties)
-      }
-    }
+module projectEnvironments 'projectEnvironmenType.bicep' = {
+  name: '${project.name}-environments'
+  scope: resourceGroup()
+  params: {
+    environments: environments
+    projectName: project.name
   }
-]
+}
 
 @description('Project DevBox Pools')
 module projectDevBoxPools 'devboxPools.bicep' = {

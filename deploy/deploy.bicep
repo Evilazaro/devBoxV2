@@ -31,6 +31,18 @@ module resourceGroups '../src/resourceOrganization/resourceGroups.bicep'= {
   }
 }
 
+@description('Monitoring Resources')
+module monitoring '../src/management/monitoringModule.bicep'= {
+  scope: resourceGroup('${workloadName}-${landingZone.management.name}-${environment}')
+  name: 'monitoring'
+  params: {
+    workloadName: workloadName
+  }
+  dependsOn: [
+    resourceGroups
+  ]
+}
+
 @description('Deploy Connectivity Module')
 module connectivity '../src/connectivity/connectivityModule.bicep' = {
   scope: resourceGroup('${workloadName}-${landingZone.connectivity.name}-${environment}')
@@ -38,6 +50,7 @@ module connectivity '../src/connectivity/connectivityModule.bicep' = {
   params: {
     name: '${workloadName}-${uniqueString(workloadName,resourceGroups.outputs.connectivityResourceGroupId)}'
     environment: environment
+    workspaceId: monitoring.outputs.logAnalyticsId
   }
 }
 
@@ -58,5 +71,7 @@ module workload '../src/workload/devCenterModule.bicep' = {
     name: '${workloadName}-devCenter'
     networkConnections: connectivity.outputs.networkConnections
     environment: environment
+    workspaceId: monitoring.outputs.logAnalyticsId
   }
 }
+

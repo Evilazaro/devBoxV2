@@ -9,6 +9,9 @@ param name string
 ])
 param environment string
 
+@description('Log Analytics Workspace')
+param workspaceId string
+
 var networkSettings = environment == 'dev'
   ? loadJsonContent('../../deploy/settings/connectivity/settings-dev.json')
   : loadJsonContent('../../deploy/settings/connectivity/settings-prod.json')
@@ -30,6 +33,36 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-05-01' = {
         }
       }
     ]
+  }
+}
+
+@description('Network Diagnostic Settings')
+resource logAnalyticsDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: 'virtualNetwork-DiagnosticSettings'
+  scope: virtualNetwork
+  properties: {
+    logAnalyticsDestinationType: 'AzureDiagnostics'
+    logs: [
+      {
+        categoryGroup: 'allLogs'
+        enabled: true
+        retentionPolicy: {
+          days: 90
+          enabled: true
+        }
+      }
+    ]
+    metrics: [
+      {
+        category: 'AllMetrics'
+        enabled: true
+        retentionPolicy: {
+          days: 90
+          enabled: true
+        }
+      }
+    ]
+    workspaceId: workspaceId
   }
 }
 

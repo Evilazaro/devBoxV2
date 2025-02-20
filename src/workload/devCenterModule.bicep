@@ -12,6 +12,9 @@ param environment string
 @description('networkConnections')
 param networkConnections array
 
+@description('Log Analytics Workspace')
+param workspaceId string
+
 @description('Dev Center settings')
 var settings = environment == 'dev'
   ? loadJsonContent('../../deploy/settings/workload/settings.dev.json')
@@ -44,6 +47,36 @@ output devCenterId string = devCenter.id
 
 @description('Dev Center Name')
 output devCenterName string = devCenter.name
+
+@description('Network Diagnostic Settings')
+resource logAnalyticsDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: 'devCenter-DiagnosticSettings'
+  scope: devCenter
+  properties: {
+    logAnalyticsDestinationType: 'AzureDiagnostics'
+    logs: [
+      {
+        categoryGroup: 'allLogs'
+        enabled: true
+        retentionPolicy: {
+          days: 90
+          enabled: true
+        }
+      }
+    ]
+    metrics: [
+      {
+        category: 'AllMetrics'
+        enabled: true
+        retentionPolicy: {
+          days: 90
+          enabled: true
+        }
+      }
+    ]
+    workspaceId: workspaceId
+  }
+}
 
 module roleAssignments '../identity/devCenterRoleAssignments.bicep' = {
   name: 'roleAssignments'
