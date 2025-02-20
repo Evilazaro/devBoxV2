@@ -98,7 +98,7 @@ output vNetAttachments array = vNetAttachment.outputs.vNetAttachments
 
 @description('Compute Gallery')
 resource computeGallery 'Microsoft.Compute/galleries@2024-03-03' = if (settings.computeGallery.create) {
-  name:  '${settings.computeGallery.name}-${uniqueString(resourceGroup().id)}'
+  name:  '${settings.computeGallery.name}${uniqueString(resourceGroup().id)}'
   location: resourceGroup().location
   tags: settings.computeGallery.tags
   properties: {
