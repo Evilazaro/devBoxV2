@@ -1,4 +1,4 @@
-using 'deploy.bicep'
+using 'main.bicep'
 
 param workloadName = 'Contoso'
 
