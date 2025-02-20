@@ -17,8 +17,8 @@ param workspaceId string
 
 @description('Dev Center settings')
 var settings = environment == 'dev'
-  ? loadJsonContent('../../.azure/settings/workload/settings.dev.json')
-  : loadJsonContent('../../.azure/settings/workload/settings.prod.json')
+  ? loadJsonContent('../../infra/settings/workload/settings.dev.json')
+  : loadJsonContent('../../infra/settings/workload/settings.prod.json')
 
 @description('Dev Center Resource')
 resource devCenter 'Microsoft.DevCenter/devcenters@2024-10-01-preview' = {

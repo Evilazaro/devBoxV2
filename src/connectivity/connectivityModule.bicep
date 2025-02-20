@@ -13,8 +13,8 @@ param environment string
 param workspaceId string
 
 var networkSettings = environment == 'dev'
-  ? loadJsonContent('../../.azure/settings/connectivity/settings-dev.json')
-  : loadJsonContent('../../.azure/settings/connectivity/settings-prod.json')
+  ? loadJsonContent('../../infra/settings/connectivity/settings-dev.json')
+  : loadJsonContent('../../infra/settings/connectivity/settings-prod.json')
 
 @description('Virtual Network')
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-05-01' = {
