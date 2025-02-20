@@ -27,6 +27,6 @@ Write-Host "Reseting azd config"
 azd config reset --no-prompt
 Write-Host "azd config reseted successfully"
 Write-Host "Creating new environments"
-azd env new dev
-azd env new prod
+azd env new dev --no-prompt
+azd env new prod --no-prompt
 Write-Host "Environments created successfully"
