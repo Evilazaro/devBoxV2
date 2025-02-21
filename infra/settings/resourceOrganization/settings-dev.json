@@ -1,6 +1,6 @@
 {
     "connectivity": {
-        "create": false,
+        "create": false, // Creates a new resource group if true
         "name": "Connectivity",
         "description": "connectivity",
         "tags": {

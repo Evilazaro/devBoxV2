@@ -6,9 +6,9 @@ $WarningPreference = "Stop"
 
 # Azure Resource Group Names Constants
 $solutionName = "Contoso"
-$workloadResourceGroup = "$solutionName-Workload-dev"
-$connectivityResourceGroup = "$solutionName-Connectivity-dev"
-$managemwentResourceGroup = "$solutionName-Management-dev"
+$workloadResourceGroup = "Workload"
+$connectivityResourceGroup = "Connectivity"
+$managemwentResourceGroup = "Management"
 
 # Function to delete a resource group
 function Remove-ResourceGroup {
