@@ -7,7 +7,7 @@ param workloadName string
 param location string
 
 @description('Landing Zone Information')
-param landingZone object 
+param landingZone object
 
 @description('Deployment Environment')
 @allowed([
@@ -18,40 +18,40 @@ param landingZone object
 param environment string
 
 @description('Connectivity Resource Group')
-resource connectivityResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' = {
+resource connectivityResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' = if (landingZone.connectivity.create) {
   name: '${workloadName}-${landingZone.connectivity.name}-${environment}'
   location: location
   tags: landingZone.connectivity.tags
 }
 
-@description('Resource Group Name')
-output connectivityResourceGroupName string = connectivityResourceGroup.name
+output connectivityResourceGroupName string = (landingZone.connectivity.create)
+  ? connectivityResourceGroup.name
+  : landingZone.connectivity.name
 
-@description('Resource Group Id')
-output connectivityResourceGroupId string = connectivityResourceGroup.id
+output connectivityResourceGroupId string = (landingZone.connectivity.create) ? connectivityResourceGroup.id : 'N/A'
 
 @description('Connectivity Resource Group')
-resource managementResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' = {
+resource managementResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' = if (landingZone.management.create) {
   name: '${workloadName}-${landingZone.management.name}-${environment}'
   location: location
   tags: landingZone.management.tags
 }
 
-@description('Resource Group ID')
-output managementResourceGroupId string = managementResourceGroup.id
+output managementResourceGroupId string = (landingZone.management.create) ? managementResourceGroup.id : 'N/A'
 
-@description('Resource Group Name')
-output managementResourceGroupName string = managementResourceGroup.name
+output managementResourceGroupName string = (landingZone.management.create)
+  ? managementResourceGroup.name
+  : landingZone.management.name
 
 @description('Connectivity Resource Group')
-resource workloadResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' = {
+resource workloadResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' = if (landingZone.workload.create) {
   name: '${workloadName}-${landingZone.workload.name}-${environment}'
   location: location
   tags: landingZone.workload.tags
 }
 
-@description('Resource Group ID')
-output workloadResourceGroupId string = workloadResourceGroup.id
+output workloadResourceGroupId string = (landingZone.workload.create) ? workloadResourceGroup.id : 'N/A'
 
-@description('Resource Group Name')
-output workloadResourceGroupName string = workloadResourceGroup.name
+output workloadResourceGroupName string = (landingZone.workload.create)
+  ? workloadResourceGroup.name
+  : landingZone.workload.name

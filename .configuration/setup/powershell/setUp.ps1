@@ -16,9 +16,35 @@ function Set-Up {
 
     try {
         Write-Output "Starting setup for deployment credentials..."
+        # Ensure the Azure CLI is installed and available
+        if (-not (Get-Command az -ErrorAction SilentlyContinue)) {
+            Write-Host "Azure CLI is not installed or not available in the PATH. It will be installed now."
+            # Install Azure CLI
+            winget install Microsoft.AzureCLI -e --accept-source-agreements --accept-package-agreements
+            if ($LASTEXITCODE -ne 0) {
+                throw "Failed to install Azure CLI."
+            }
+        }
+        else {
+            winget upgrade Microsoft.AzureCLI -e --accept-source-agreements --accept-package-agreements
+        }
+
+        # Ensure azd is installed
+        if (-not (Get-Command azd -ErrorAction SilentlyContinue)) {
+            Write-Host "azd is not installed or not available in the PATH. It will be installed now."
+            # Install azd
+            winget install Microsoft.Azd -e --accept-source-agreements --accept-package-agreements
+            if ($LASTEXITCODE -ne 0) {
+                throw "Failed to install azd."
+            }
+        }
+        else {
+            winget upgrade Microsoft.Azd -e --accept-source-agreements --accept-package-agreements
+        }
 
         # Execute the script to generate deployment credentials
         # .\Azure\generateDeploymentCredentials.ps1 -appName $appName -displayName $displayName
+        .\Azure\createUsersAndAssignRole.ps1
 
         Write-Output "Resetting azd config..."
         azd config reset --no-prompt

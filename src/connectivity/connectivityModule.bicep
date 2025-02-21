@@ -1,6 +1,3 @@
-@description('Virtual Network Name')
-param name string
-
 @description('Deployment Environment')
 @allowed([
   'dev'
@@ -17,8 +14,8 @@ var networkSettings = environment == 'dev'
   : loadJsonContent('../../infra/settings/connectivity/settings-prod.json')
 
 @description('Virtual Network')
-resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-05-01' = {
-  name: name
+resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-05-01' = if (networkSettings.create) {
+  name: networkSettings.name
   location: resourceGroup().location
   tags: networkSettings.tags
   properties: {
@@ -36,8 +33,13 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-05-01' = {
   }
 }
 
+resource existingVNet 'Microsoft.Network/virtualNetworks@2024-05-01' existing = if (!networkSettings.create) {
+  name: networkSettings.name
+  scope: resourceGroup()
+}
+
 @description('Network Diagnostic Settings')
-resource logAnalyticsDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+resource logAnalyticsDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = if (!networkSettings.create) {
   name: 'virtualNetwork-DiagnosticSettings'
   scope: virtualNetwork
   properties: {
@@ -59,18 +61,18 @@ resource logAnalyticsDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2
 }
 
 @description('Virtual Network Id')
-output virtualNetworkId string = virtualNetwork.id
+output virtualNetworkId string = (networkSettings.create) ? virtualNetwork.id : existingVNet.id
 
 @description('Virtual Network Subnets')
 output virtualNetworkSubnets array = [
-  for (subnet,i) in networkSettings.subnets: {
-    id: virtualNetwork.properties.subnets[i].id
-    name: subnet.name
+  for (subnet, i) in networkSettings.subnets: {
+    id: (networkSettings.create) ? virtualNetwork.properties.subnets[i].id : existingVNet.properties.subnets[i].id
+    name: (networkSettings.create) ? subnet.name : existingVNet.properties.subnets[i].name
   }
 ]
 
 @description('Virtual Network Name')
-output virtualNetworkName string = virtualNetwork.name
+output virtualNetworkName string = (networkSettings.create) ? virtualNetwork.name : existingVNet.name
 
 @description('Network Connections for the Virtual Network Subnets')
 resource networkConnection 'Microsoft.DevCenter/networkConnections@2024-10-01-preview' = [
@@ -80,7 +82,7 @@ resource networkConnection 'Microsoft.DevCenter/networkConnections@2024-10-01-pr
     tags: networkSettings.tags
     properties: {
       domainJoinType: 'AzureADJoin'
-      subnetId: virtualNetwork.properties.subnets[i].id
+      subnetId: (networkSettings.create) ? virtualNetwork.properties.subnets[i].id : existingVNet.properties.subnets[i].id
     }
   }
 ]

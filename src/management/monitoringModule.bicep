@@ -1,11 +1,11 @@
 @description('Solution Name')
-param workloadName string
+param name string
 
 module logAnalytics './logAnalytics.bicep' = {
   name: 'logAnalytics'
   scope: resourceGroup()
   params: {
-    name: '${workloadName}-${uniqueString(resourceGroup().id)}'
+    name: '${name}-${uniqueString(resourceGroup().id)}'
   }
 }
 
