@@ -51,8 +51,6 @@ resource connectivityResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-0
   tags: landingZone.connectivity.tags
 }
 
-var connectivityResourceGroupId = (landingZone.connectivity.create) ? connectivityResourceGroup.id : 'N/A'
-
 var connectivityResourceGroupName = (landingZone.connectivity.create)
   ? connectivityResourceGroup.name
   : landingZone.connectivity.name
