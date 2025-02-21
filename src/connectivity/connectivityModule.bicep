@@ -17,7 +17,7 @@ var networkSettings = environment == 'dev'
   : loadJsonContent('../../infra/settings/connectivity/settings-prod.json')
 
 @description('Virtual Network')
-resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-05-01' = {
+resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-05-01' = if (networkSettings.create) {
   name: name
   location: resourceGroup().location
   tags: networkSettings.tags
@@ -36,10 +36,15 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-05-01' = {
   }
 }
 
+resource existingVNet 'Microsoft.Network/virtualNetworks@2024-05-01' existing = if (!networkSettings.create) {
+  name: name
+  scope: resourceGroup()
+}
+
 @description('Network Diagnostic Settings')
 resource logAnalyticsDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   name: 'virtualNetwork-DiagnosticSettings'
-  scope: virtualNetwork
+  scope: (networkSettings.create) ? virtualNetwork : existingVNet
   properties: {
     logAnalyticsDestinationType: 'AzureDiagnostics'
     logs: [
@@ -59,13 +64,13 @@ resource logAnalyticsDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2
 }
 
 @description('Virtual Network Id')
-output virtualNetworkId string = virtualNetwork.id
+output virtualNetworkId string = (networkSettings.create) ? virtualNetwork.id : existingVNet.id
 
 @description('Virtual Network Subnets')
 output virtualNetworkSubnets array = [
-  for (subnet,i) in networkSettings.subnets: {
-    id: virtualNetwork.properties.subnets[i].id
-    name: subnet.name
+  for (subnet, i) in networkSettings.subnets: {
+    id: (networkSettings.create) ? virtualNetwork.properties.subnets[i].id : existingVNet.properties.subnets[i].id
+    name: (networkSettings.create) ? subnet.name : existingVNet.properties.subnets[i].name
   }
 ]
 

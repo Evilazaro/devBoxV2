@@ -20,41 +20,23 @@ var landingZone = environment == 'dev'
   : loadJsonContent('settings/resourceOrganization/settings-prod.json')
 
 @description('Connectivity Resource Group')
-module resourceGroups '../src/resourceOrganization/resourceGroups.bicep'= {
-  name: 'resourceOrganization'
-  scope: subscription()
-  params: {
-    location: location
-    environment: environment
-    landingZone: landingZone
-    workloadName: workloadName
-  }
+resource managementResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' = if (landingZone.management.create) {
+  name: '${workloadName}-${landingZone.management.name}-${environment}'
+  location: location
+  tags: landingZone.management.tags
 }
 
-@description('Connectivity Resource Group Id')
-output connectivityResourceGroupId string = resourceGroups.outputs.connectivityResourceGroupId
-@description('Connectivity Resource Group Name')
-output connectivityResourceGroupName string = resourceGroups.outputs.connectivityResourceGroupName
-@description('Management Resource Group Id')
-output managementResourceGroupId string = resourceGroups.outputs.managementResourceGroupId
-@description('Management Resource Group Name')
-output managementResourceGroupName string = resourceGroups.outputs.managementResourceGroupName
-@description('Workload Resource Group Id')
-output workloadResourceGroupId string = resourceGroups.outputs.workloadResourceGroupId
-@description('Workload Resource Group Name')
-output workloadResourceGroupName string = resourceGroups.outputs.workloadResourceGroupName
-
+var managementResourceGroupName = (landingZone.management.create)
+  ? managementResourceGroup.name
+  : landingZone.management.name
 
 @description('Monitoring Resources')
-module monitoring '../src/management/monitoringModule.bicep'= {
-  scope: resourceGroup('${workloadName}-${landingZone.management.name}-${environment}')
+module monitoring '../src/management/monitoringModule.bicep' = {
+  scope: resourceGroup(managementResourceGroupName)
   name: 'monitoring'
   params: {
-    workloadName: workloadName	
+    workloadName: workloadName
   }
-  dependsOn: [
-    resourceGroups
-  ]
 }
 
 @description('Monitoring Log Analytics Id')
@@ -62,12 +44,25 @@ output monitoringLogAnalyticsId string = monitoring.outputs.logAnalyticsId
 @description('Monitoring Log Analytics Name')
 output monitoringLogAnalyticsName string = monitoring.outputs.logAnalyticsName
 
+@description('Connectivity Resource Group')
+resource connectivityResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' = if (landingZone.connectivity.create) {
+  name: '${workloadName}-${landingZone.connectivity.name}-${environment}'
+  location: location
+  tags: landingZone.connectivity.tags
+}
+
+var connectivityResourceGroupId = (landingZone.connectivity.create) ? connectivityResourceGroup.id : 'N/A'
+
+var connectivityResourceGroupName = (landingZone.connectivity.create)
+  ? connectivityResourceGroup.name
+  : landingZone.connectivity.name
+
 @description('Deploy Connectivity Module')
 module connectivity '../src/connectivity/connectivityModule.bicep' = {
-  scope: resourceGroup('${workloadName}-${landingZone.connectivity.name}-${environment}')
+  scope: resourceGroup(connectivityResourceGroupName)
   name: 'connectivity'
   params: {
-    name: '${workloadName}-${uniqueString(workloadName,resourceGroups.outputs.connectivityResourceGroupId)}'
+    name: '${workloadName}-${uniqueString(workloadName,connectivityResourceGroupId)}'
     environment: environment
     workspaceId: monitoring.outputs.logAnalyticsId
   }
@@ -79,9 +74,18 @@ output connectivityVNetId string = connectivity.outputs.virtualNetworkId
 @description('Connectivity vNet Name')
 output connectivityVNetName string = connectivity.outputs.virtualNetworkName
 
+@description('Connectivity Resource Group')
+resource workloadResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' = if (landingZone.workload.create) {
+  name: '${workloadName}-${landingZone.workload.name}-${environment}'
+  location: location
+  tags: landingZone.workload.tags
+}
+
+var workloadResourceGroupName = (landingZone.workload.create) ? workloadResourceGroup.name : landingZone.workload.name
+
 @description('Deploy Workload Module')
 module workload '../src/workload/devCenterModule.bicep' = {
-  scope: resourceGroup('${workloadName}-${landingZone.workload.name}-${environment}')
+  scope: resourceGroup(workloadResourceGroupName)
   name: 'workload'
   params: {
     name: '${workloadName}-devCenter'
@@ -96,4 +100,3 @@ output workloadDevCenterId string = workload.outputs.devCenterId
 
 @description('Workload Dev Center Name')
 output workloadDevCenterName string = workload.outputs.devCenterName
-
