@@ -1,6 +1,6 @@
 {
     "connectivity": {
-        "create": true,
+        "create": false, // Creates a new resource group if true
         "name": "Connectivity",
         "description": "connectivity",
         "tags": {
@@ -14,7 +14,7 @@
         }
     },
     "identity": {
-        "create": true,
+        "create": false,
         "name": "Identity",
         "description": "identity",
         "tags": {
@@ -28,7 +28,7 @@
         }
     },
     "management": {
-        "create": true,
+        "create": false,
         "name": "Management",
         "description": "management",
         "tags": {
@@ -42,7 +42,7 @@
         }
     },
     "workload": {
-        "create": true,
+        "create": false,
         "name": "Workload",
         "description": "prodExp",
         "tags": {
