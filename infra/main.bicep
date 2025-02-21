@@ -35,7 +35,7 @@ module monitoring '../src/management/monitoringModule.bicep' = {
   scope: resourceGroup(managementResourceGroupName)
   name: 'monitoring'
   params: {
-    workloadName: workloadName
+    name: landingZone.management.logAnalyticsName
   }
 }
 
@@ -62,7 +62,6 @@ module connectivity '../src/connectivity/connectivityModule.bicep' = {
   scope: resourceGroup(connectivityResourceGroupName)
   name: 'connectivity'
   params: {
-    name: '${workloadName}-${uniqueString(workloadName,connectivityResourceGroupId)}'
     environment: environment
     workspaceId: monitoring.outputs.logAnalyticsId
   }

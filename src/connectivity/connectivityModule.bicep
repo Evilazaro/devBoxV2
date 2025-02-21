@@ -1,6 +1,3 @@
-@description('Virtual Network Name')
-param name string
-
 @description('Deployment Environment')
 @allowed([
   'dev'
@@ -18,7 +15,7 @@ var networkSettings = environment == 'dev'
 
 @description('Virtual Network')
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-05-01' = if (networkSettings.create) {
-  name: name
+  name: networkSettings.name
   location: resourceGroup().location
   tags: networkSettings.tags
   properties: {
@@ -37,14 +34,14 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-05-01' = if (net
 }
 
 resource existingVNet 'Microsoft.Network/virtualNetworks@2024-05-01' existing = if (!networkSettings.create) {
-  name: name
+  name: networkSettings.name
   scope: resourceGroup()
 }
 
 @description('Network Diagnostic Settings')
-resource logAnalyticsDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+resource logAnalyticsDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = if (!networkSettings.create) {
   name: 'virtualNetwork-DiagnosticSettings'
-  scope: (networkSettings.create) ? virtualNetwork : existingVNet
+  scope: virtualNetwork
   properties: {
     logAnalyticsDestinationType: 'AzureDiagnostics'
     logs: [

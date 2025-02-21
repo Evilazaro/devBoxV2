@@ -27,9 +27,6 @@ function Set-Up {
         }
         else {
             winget upgrade Microsoft.AzureCLI -e --accept-source-agreements --accept-package-agreements
-            if ($LASTEXITCODE -ne 0) {
-                throw "Failed to install Azure CLI."
-            }
         }
 
         # Ensure azd is installed
@@ -43,9 +40,6 @@ function Set-Up {
         }
         else {
             winget upgrade Microsoft.Azd -e --accept-source-agreements --accept-package-agreements
-            if ($LASTEXITCODE -ne 0) {
-                throw "Failed to install azd."
-            }
         }
 
         # Execute the script to generate deployment credentials

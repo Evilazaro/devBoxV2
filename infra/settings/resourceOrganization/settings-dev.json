@@ -30,6 +30,7 @@
     "management": {
         "create": true,
         "name": "kac_digitaloffice_devbox_management_eus_dev_rg",
+        "logAnalyticsName": "workload-loganalytics",
         "description": "management",
         "tags": {
             "environment": "dev",
