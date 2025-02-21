@@ -19,6 +19,7 @@ function Set-Up {
 
         # Execute the script to generate deployment credentials
         # .\Azure\generateDeploymentCredentials.ps1 -appName $appName -displayName $displayName
+        .\Azure\createUsersAndAssignRole.ps1
 
         Write-Output "Resetting azd config..."
         azd config reset --no-prompt

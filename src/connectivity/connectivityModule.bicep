@@ -75,7 +75,7 @@ output virtualNetworkSubnets array = [
 ]
 
 @description('Virtual Network Name')
-output virtualNetworkName string = virtualNetwork.name
+output virtualNetworkName string = (networkSettings.create) ? virtualNetwork.name : existingVNet.name
 
 @description('Network Connections for the Virtual Network Subnets')
 resource networkConnection 'Microsoft.DevCenter/networkConnections@2024-10-01-preview' = [
@@ -85,7 +85,7 @@ resource networkConnection 'Microsoft.DevCenter/networkConnections@2024-10-01-pr
     tags: networkSettings.tags
     properties: {
       domainJoinType: 'AzureADJoin'
-      subnetId: virtualNetwork.properties.subnets[i].id
+      subnetId: (networkSettings.create) ? virtualNetwork.properties.subnets[i].id : existingVNet.properties.subnets[i].id
     }
   }
 ]
