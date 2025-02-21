@@ -21,7 +21,7 @@ var landingZone = environment == 'dev'
 
 @description('Connectivity Resource Group')
 resource managementResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' = if (landingZone.management.create) {
-  name: '${workloadName}-${landingZone.management.name}-${environment}'
+  name: landingZone.management.name
   location: location
   tags: landingZone.management.tags
 }
@@ -46,7 +46,7 @@ output monitoringLogAnalyticsName string = monitoring.outputs.logAnalyticsName
 
 @description('Connectivity Resource Group')
 resource connectivityResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' = if (landingZone.connectivity.create) {
-  name: '${workloadName}-${landingZone.connectivity.name}-${environment}'
+  name: landingZone.connectivity.name
   location: location
   tags: landingZone.connectivity.tags
 }
@@ -76,7 +76,7 @@ output connectivityVNetName string = connectivity.outputs.virtualNetworkName
 
 @description('Connectivity Resource Group')
 resource workloadResourceGroup 'Microsoft.Resources/resourceGroups@2024-11-01' = if (landingZone.workload.create) {
-  name: '${workloadName}-${landingZone.workload.name}-${environment}'
+  name: landingZone.workload.name
   location: location
   tags: landingZone.workload.tags
 }
@@ -88,7 +88,7 @@ module workload '../src/workload/devCenterModule.bicep' = {
   scope: resourceGroup(workloadResourceGroupName)
   name: 'workload'
   params: {
-    name: '${workloadName}-devCenter'
+    name: landingZone.workload.devCenterName
     networkConnections: connectivity.outputs.networkConnections
     environment: environment
     workspaceId: monitoring.outputs.logAnalyticsId

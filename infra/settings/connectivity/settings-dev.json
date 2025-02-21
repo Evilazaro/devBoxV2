@@ -1,7 +1,7 @@
 {
     "create": true,
-    "resourceGroupName": "Connectivity", // Only used if create is true
-    "name": "devexp",
+    "resourceGroupName": "kac_digitaloffice_devbox_network_eus_dev_rg", // Only used if create is false. 
+    "name": "okn-eus-prd-okn-dev-box-spoke-vnet",
     "addressPrefixes": [
         "10.0.0.0/16"
     ],
